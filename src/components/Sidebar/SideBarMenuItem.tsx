@@ -1,10 +1,8 @@
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Collapse, List } from '@mui/material';
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import SidebarItem from './type';
 
 type SideBarMenuItemProps = {

@@ -1,14 +1,13 @@
-import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import LoginPage from './pages/LoginPage';
-import AdminLayout from './layouts/AdminLayout';
-import AdminManagePage from './pages/ViewAdminsPage';
-import UserManagePage from './pages/UserManagePage';
-import ClassManagePage from './pages/ClassManagePage';
-import ViewAdminPage from './pages/ViewAdminsPage';
-import AddAdminPage from './pages/AddAdminPage';
-import { AlertProvider } from './context/AlertContext';
+import './App.css';
 import AlertNotification from './components/AlertNotification';
+import { AlertProvider } from './context/AlertContext';
+import AdminLayout from './layouts/AdminLayout';
+import AddAdminPage from './pages/AddAdminPage';
+import ClassManagePage from './pages/ClassManagePage';
+import LoginPage from './pages/LoginPage';
+import UserManagePage from './pages/UserManagePage';
+import ViewAdminPage from './pages/ViewAdminsPage';
 
 function App() {
 	return (
