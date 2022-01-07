@@ -1,0 +1,66 @@
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Collapse, List } from '@mui/material';
+import classNames from 'classnames';
+import React, { useEffect, useState } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
+import SidebarItem from './type';
+
+type SideBarMenuItemProps = {
+	item: SidebarItem;
+	className?: string;
+	active?: boolean;
+	onMenuClick?: (item: SidebarItem) => void;
+} & React.HTMLAttributes<HTMLElement>;
+
+const SideBarMenuItem = ({
+	item,
+	className,
+	active = false,
+	onMenuClick,
+	children,
+	...rest
+}: SideBarMenuItemProps) => {
+	const [collapsed, setCollapsed] = useState(true);
+
+	const classes = classNames(
+		'w-full text-left',
+		'rounded-md px-5 py-3',
+		'flex items-center cursor-pointer',
+		'font-semibold',
+		'transition-all',
+		{
+			'text-blue-700': active === true,
+			'hover:bg-gray-200': active === false
+		},
+		className
+	);
+
+	const handleMenuClick = () => {
+		setCollapsed((prev) => !prev);
+		onMenuClick?.(item);
+	};
+
+	return (
+		<div className={className} {...rest}>
+			<NavLink to={item.path}>
+				<div className={classes} onClick={handleMenuClick}>
+					<FontAwesomeIcon icon={item.icon} />
+					<div className="flex-1 ml-4">
+						<span>{item.name}</span>
+					</div>
+					{children &&
+						(collapsed ? (
+							<FontAwesomeIcon size="sm" icon={faAngleDown} />
+						) : (
+							<FontAwesomeIcon size="sm" icon={faAngleUp} />
+						))}
+				</div>
+			</NavLink>
+			{collapsed && <div className="pl-5">{children}</div>}
+		</div>
+	);
+};
+
+export default SideBarMenuItem;
