@@ -41,16 +41,18 @@ const items: SidebarItem[] = [
 
 const AdminLayout = () => {
 	return (
-		<div className="relative">
+		<div className="relative flex">
 			<div className="w-64 h-screen p-2 overflow-auto bg-white shadow-xl rounded-xl">
 				<NavLink to="/">
-					<h1 className="mx-5 my-3 text-2xl font-black font-logo">Gradebook</h1>
+					<h1 className="mx-5 my-3 text-xl font-black font-logo">Gradebook</h1>
 				</NavLink>
 
 				<Sidebar items={items} className="mt-10" />
 			</div>
 
-			<Outlet />
+			<div className="px-5 py-2 overflow-auto">
+				<Outlet />
+			</div>
 		</div>
 	);
 };

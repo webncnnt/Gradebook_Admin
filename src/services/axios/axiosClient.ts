@@ -25,8 +25,17 @@ axiosClient.interceptors.request.use(async (config) => {
 	return config;
 });
 
-axiosClient.interceptors.response.use(async (response) => {
-	return response;
-});
+axiosClient.interceptors.response.use(
+	async (response) => {
+		return response;
+	},
+	async (error) => {
+		if (error.response.status === 401) {
+			return Promise.reject(error.response);
+		}
+
+		return Promise.reject(error);
+	}
+);
 
 export default axiosClient;

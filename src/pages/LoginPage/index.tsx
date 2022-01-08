@@ -1,57 +1,37 @@
 import { CircularProgress } from '@mui/material';
 import { useEffect } from 'react';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FullScreenBackdrop from '../../components/FullScreenBackdrop';
 import Login from '../../components/Login/Login';
 import useAlert from '../../hooks/useAlert';
 import useAsync from '../../hooks/useAsync';
-import authApi from '../../services/apis/authApi';
+import useAuth from '../../hooks/useAuth';
 import LoginFormData from '../../types/form/LoginFormData';
-
-const INITIAL_LOGIN_DATA = {
-	email: '',
-	password: ''
-};
 
 const LoginPage = () => {
 	const navigate = useNavigate();
+	const { currentUser, login } = useAuth();
 	const { addMessage } = useAlert();
-	const [formData, setFormData] = useState<LoginFormData>(INITIAL_LOGIN_DATA);
-	const [submit, setSubmit] = useState(false);
-
-	const { execute, status, value, error } = useAsync(
-		async () => await authApi.postLogin(formData.email, formData.password)
+	const { execute, status, value, error } = useAsync((data: LoginFormData) =>
+		login(data)
 	);
 
 	useEffect(() => {
-		if (submit) {
-			execute();
-			setSubmit(false);
-		}
-	}, [submit, execute]);
+		if (status !== 'error') return;
+		if (error === null) return;
 
-	useEffect(() => {
-		if (status === 'error' && error !== null) {
-			addMessage(error.message, 'error');
-		}
+		addMessage(error.data.message, 'error');
 	}, [status, error, addMessage]);
 
 	useEffect(() => {
 		if (status !== 'success') return;
+		if (currentUser === null) return;
 
-		if (value === null) {
-			addMessage('Login failed', 'error');
-			return;
-		}
-
-		localStorage.setItem('access_token', value.data.token);
 		navigate('/', { replace: true });
-	}, [status, value, addMessage, navigate]);
+	}, [status, currentUser, navigate]);
 
 	const onSubmit = (data: LoginFormData) => {
-		setFormData(data);
-		setSubmit(true);
+		execute(data);
 	};
 
 	return (
@@ -60,7 +40,7 @@ const LoginPage = () => {
 				<div className="mb-16 text-5xl font-black text-center font-logo ">
 					Gradebook
 				</div>
-				<Login onSubmit={onSubmit} />
+				<Login error={status === 'error'} onSubmit={onSubmit} />
 			</div>
 
 			{status === 'pending' && (

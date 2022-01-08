@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { TextField } from '@mui/material';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import LoginFormData from '../../types/form/LoginFormData';
@@ -7,8 +8,7 @@ import Button from '../Button';
 
 type LoginFormProps = {
 	formData?: LoginFormData;
-	passwordError?: string;
-	emailError?: string;
+	error?: boolean;
 	onSubmit?: (data: LoginFormData) => void;
 };
 
@@ -24,20 +24,22 @@ const schema = Yup.object().shape({
 		.min(6, 'Password must be at least 6 characters')
 });
 
-const Login = ({
-	onSubmit,
-	formData,
-	passwordError,
-	emailError
-}: LoginFormProps) => {
+const Login = ({ onSubmit, formData, error = false }: LoginFormProps) => {
 	const {
 		register,
 		handleSubmit,
+		setFocus,
 		formState: { errors }
 	} = useForm<LoginFormData>({
 		mode: 'onBlur',
 		resolver: yupResolver(schema)
 	});
+
+	useEffect(() => {
+		if (error) {
+			setFocus('email');
+		}
+	}, [error]);
 
 	const onFormSubmit = (data: LoginFormData) => {
 		if (!onSubmit) return;
@@ -50,14 +52,16 @@ const Login = ({
 		<form id="login-form" onSubmit={handleSubmit(onFormSubmit)}>
 			<div className="flex flex-col gap-4 w-96">
 				<TextField
+					autoFocus
 					{...register('email')}
 					autoComplete="email"
 					id="email_textbox"
 					title="Email"
+					defaultValue="ndmt1at21@gmail.com"
 					label="Email"
 					value={formData?.email}
-					helperText={errors.email?.message || emailError}
-					error={errors.email !== undefined || emailError !== undefined}
+					helperText={errors.email?.message}
+					error={errors.email !== undefined}
 				/>
 
 				<TextField
@@ -67,9 +71,10 @@ const Login = ({
 					id="password_textbox"
 					title="Password"
 					value={formData?.password}
+					defaultValue="12345678"
 					label="Password"
-					error={errors.password !== undefined || passwordError !== undefined}
-					helperText={errors.password?.message || passwordError}
+					error={errors.password !== undefined}
+					helperText={errors.password?.message}
 				/>
 
 				<Button type="submit" className="mt-5">

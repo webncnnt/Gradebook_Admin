@@ -1,32 +1,14 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import AdminLayout from '../layouts/AdminLayout';
-import AddAdminPage from '../pages/AddAdminPage';
-import ClassManagePage from '../pages/ClassManagePage';
-import LoginPage from '../pages/LoginPage';
-import NotFoundPage from '../pages/NotFoundPage/NotFoundPage';
-import UserManagePage from '../pages/UserManagePage';
-import ViewAdminPage from '../pages/ViewAdminsPage';
+import { BrowserRouter } from 'react-router-dom';
+import useAuth from '../hooks/useAuth';
+import AuthRoutes from './AuthRoutes';
+import GuestRoutes from './GuestRoutes';
 
 const AppRoutes = () => {
+	const { currentUser } = useAuth();
+
 	return (
 		<BrowserRouter>
-			<Routes>
-				<Route path="/" element={<AdminLayout />}>
-					<Route path="/" element={<Navigate to={'/class'} />} />
-					<Route path="/admin">
-						<Route
-							path="/admin"
-							element={<Navigate to={'/admin/viewAdmins'} />}
-						/>
-						<Route path="/admin/viewAdmins" element={<ViewAdminPage />} />
-						<Route path="/admin/addAdmin" element={<AddAdminPage />} />
-					</Route>
-					<Route path="/user" element={<UserManagePage />} />
-					<Route path="/class" element={<ClassManagePage />} />
-				</Route>
-				<Route path="/login" element={<LoginPage />} />
-				<Route path="*" element={<NotFoundPage />} />
-			</Routes>
+			{currentUser ? <AuthRoutes /> : <GuestRoutes />}
 		</BrowserRouter>
 	);
 };
