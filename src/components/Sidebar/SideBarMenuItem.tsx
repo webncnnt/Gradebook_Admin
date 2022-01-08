@@ -29,7 +29,6 @@ const SideBarMenuItem = ({
 		'font-semibold',
 		'transition-all',
 		{
-			'text-blue-700': active === true,
 			'hover:bg-gray-200': active === false
 		},
 		className

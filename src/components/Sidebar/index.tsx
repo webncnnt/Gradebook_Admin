@@ -19,16 +19,21 @@ const Sidebar = ({ items, className, ...rest }: SidebarProps) => {
 		console.log(item);
 	};
 
-	const createSideBarMenuItem = (item: SidebarItem) => (
-		<SideBarMenuItem
-			item={item}
-			key={item.path}
-			active={activePath === item.path && !item.items}
-			onMenuClick={handleClick}
-		>
-			{item.items && item.items.map((item) => createSideBarMenuItem(item))}
-		</SideBarMenuItem>
-	);
+	const createSideBarMenuItem = (item: SidebarItem) => {
+		const isActive = activePath === item.path && !item.items;
+
+		return (
+			<SideBarMenuItem
+				className={isActive ? 'text-blue-700' : 'text-gray-500'}
+				item={item}
+				key={item.path}
+				active={isActive}
+				onMenuClick={handleClick}
+			>
+				{item.items && item.items.map((item) => createSideBarMenuItem(item))}
+			</SideBarMenuItem>
+		);
+	};
 
 	return (
 		<div className={className} {...rest}>

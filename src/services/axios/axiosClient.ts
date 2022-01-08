@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosClient = axios.create({
-	baseURL: 'http://localhost:800/api'
+	baseURL: 'http://localhost:8000/api'
 });
 
 axiosClient.interceptors.request.use(async (config) => {
@@ -19,6 +19,8 @@ axiosClient.interceptors.request.use(async (config) => {
 	if (!contentType) {
 		config.headers['Content-Type'] = 'application/json';
 	}
+
+	config.timeout = 10000;
 
 	return config;
 });

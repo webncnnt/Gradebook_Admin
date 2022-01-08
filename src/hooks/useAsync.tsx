@@ -1,11 +1,8 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 
 type AsyncExecuteStatus = 'idle' | 'pending' | 'success' | 'error';
 
-const useAsync = <T, E = any>(
-	asyncFunction: () => Promise<T>,
-	deps?: React.DependencyList
-) => {
+const useAsync = <T, E = any>(asyncFunction: () => Promise<T>) => {
 	const [status, setStatus] = useState<AsyncExecuteStatus>('idle');
 	const [value, setValue] = useState<T | null>(null);
 	const [error, setError] = useState<E | null>(null);
@@ -24,7 +21,7 @@ const useAsync = <T, E = any>(
 				setError(error);
 				setStatus('error');
 			});
-	}, [asyncFunction, deps]);
+	}, [asyncFunction]);
 
 	return { execute, status, value, error };
 };

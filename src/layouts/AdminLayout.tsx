@@ -1,12 +1,11 @@
 import {
 	faAdd,
-	faFontAwesomeFlag,
 	faGraduationCap,
 	faList,
 	faScrewdriverWrench,
 	faUsers
 } from '@fortawesome/free-solid-svg-icons';
-import { Outlet } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import SidebarItem from '../components/Sidebar/type';
 
@@ -44,7 +43,10 @@ const AdminLayout = () => {
 	return (
 		<div className="relative">
 			<div className="w-64 h-screen p-2 overflow-auto bg-white shadow-xl rounded-xl">
-				<h1 className="mx-5 my-3 text-2xl font-black font-logo">Gradebook</h1>
+				<NavLink to="/">
+					<h1 className="mx-5 my-3 text-2xl font-black font-logo">Gradebook</h1>
+				</NavLink>
+
 				<Sidebar items={items} className="mt-10" />
 			</div>
 

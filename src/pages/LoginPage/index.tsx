@@ -1,6 +1,7 @@
 import { CircularProgress } from '@mui/material';
 import { useEffect } from 'react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import FullScreenBackdrop from '../../components/FullScreenBackdrop';
 import Login from '../../components/Login/Login';
 import useAlert from '../../hooks/useAlert';
@@ -14,24 +15,39 @@ const INITIAL_LOGIN_DATA = {
 };
 
 const LoginPage = () => {
+	const navigate = useNavigate();
 	const { addMessage } = useAlert();
 	const [formData, setFormData] = useState<LoginFormData>(INITIAL_LOGIN_DATA);
 	const [submit, setSubmit] = useState(false);
 
 	const { execute, status, value, error } = useAsync(
-		() => authApi.postLogin(formData.email, formData.password),
-		[formData]
+		async () => await authApi.postLogin(formData.email, formData.password)
 	);
 
 	useEffect(() => {
-		submit === true && execute();
-	}, [submit, formData]);
+		if (submit) {
+			execute();
+			setSubmit(false);
+		}
+	}, [submit, execute]);
 
 	useEffect(() => {
 		if (status === 'error' && error !== null) {
 			addMessage(error.message, 'error');
 		}
-	}, [status]);
+	}, [status, error, addMessage]);
+
+	useEffect(() => {
+		if (status !== 'success') return;
+
+		if (value === null) {
+			addMessage('Login failed', 'error');
+			return;
+		}
+
+		localStorage.setItem('access_token', value.data.token);
+		navigate('/', { replace: true });
+	}, [status, value, addMessage, navigate]);
 
 	const onSubmit = (data: LoginFormData) => {
 		setFormData(data);
