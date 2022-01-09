@@ -1,5 +1,6 @@
+import RegisterAdminFormData from '../../types/form/RegisterAdminFormData';
+import UpdateAdminFormData from '../../types/form/UpdateAdminFormData';
 import ListFetchParams from '../../types/ListFetchParams';
-import { UserModel } from '../../types/models/userModel';
 import axiosClient from '../axios/axiosClient';
 
 const adminApi = {
@@ -9,8 +10,12 @@ const adminApi = {
 	getAdmin: async (id: number) => {
 		return await axiosClient.get(`/admins/${id}`);
 	},
-	postCreateAdmin: async (user: UserModel) => {
-		return await axiosClient.patch(`/admins/${user.id}`, user);
+	postCreateAdmin: async (formData: RegisterAdminFormData) => {
+		return await axiosClient.post(`/auth/register`, formData);
+	},
+	patchUpdateAdmin: async (formData: UpdateAdminFormData) => {
+		// TODO
+		return await axiosClient.patch(`/admins`, formData);
 	}
 };
 

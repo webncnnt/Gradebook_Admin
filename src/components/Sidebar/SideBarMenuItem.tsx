@@ -39,22 +39,31 @@ const SideBarMenuItem = ({
 		onMenuClick?.(item);
 	};
 
+	const renderContent = () => {
+		return (
+			<div className={classes} onClick={handleMenuClick}>
+				<FontAwesomeIcon icon={item.icon} />
+				<div className="flex-1 ml-4">
+					<span>{item.name}</span>
+				</div>
+				{children &&
+					(collapsed ? (
+						<FontAwesomeIcon size="sm" icon={faAngleUp} />
+					) : (
+						<FontAwesomeIcon size="sm" icon={faAngleDown} />
+					))}
+			</div>
+		);
+	};
+
 	return (
 		<div className={className} {...rest}>
-			<NavLink to={item.path}>
-				<div className={classes} onClick={handleMenuClick}>
-					<FontAwesomeIcon icon={item.icon} />
-					<div className="flex-1 ml-4">
-						<span>{item.name}</span>
-					</div>
-					{children &&
-						(collapsed ? (
-							<FontAwesomeIcon size="sm" icon={faAngleDown} />
-						) : (
-							<FontAwesomeIcon size="sm" icon={faAngleUp} />
-						))}
-				</div>
-			</NavLink>
+			{item.items ? (
+				renderContent()
+			) : (
+				<NavLink to={item.path}>{renderContent()}</NavLink>
+			)}
+
 			{collapsed && <div className="pl-5">{children}</div>}
 		</div>
 	);

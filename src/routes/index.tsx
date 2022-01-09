@@ -1,14 +1,12 @@
 import { BrowserRouter } from 'react-router-dom';
-import useAuth from '../hooks/useAuth';
-import AuthRoutes from './AuthRoutes';
+import AdminRoutes from './AdminRoutes';
 import GuestRoutes from './GuestRoutes';
 
 const AppRoutes = () => {
-	const { currentUser } = useAuth();
-
 	return (
 		<BrowserRouter>
-			{currentUser ? <AuthRoutes /> : <GuestRoutes />}
+			<AdminRoutes />
+			<GuestRoutes />
 		</BrowserRouter>
 	);
 };

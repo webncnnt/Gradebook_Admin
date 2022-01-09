@@ -2,7 +2,7 @@ import { CircularProgress } from '@mui/material';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FullScreenBackdrop from '../../components/FullScreenBackdrop';
-import Login from '../../components/Login/Login';
+import Login from '../../components/LoginForm/Login';
 import useAlert from '../../hooks/useAlert';
 import useAsync from '../../hooks/useAsync';
 import useAuth from '../../hooks/useAuth';

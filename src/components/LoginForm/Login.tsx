@@ -7,7 +7,6 @@ import LoginFormData from '../../types/form/LoginFormData';
 import Button from '../Button';
 
 type LoginFormProps = {
-	formData?: LoginFormData;
 	error?: boolean;
 	onSubmit?: (data: LoginFormData) => void;
 };
@@ -24,7 +23,7 @@ const schema = Yup.object().shape({
 		.min(6, 'Password must be at least 6 characters')
 });
 
-const Login = ({ onSubmit, formData, error = false }: LoginFormProps) => {
+const LoginForm = ({ onSubmit, error = false }: LoginFormProps) => {
 	const {
 		register,
 		handleSubmit,
@@ -39,7 +38,7 @@ const Login = ({ onSubmit, formData, error = false }: LoginFormProps) => {
 		if (error) {
 			setFocus('email');
 		}
-	}, [error]);
+	}, [error, setFocus]);
 
 	const onFormSubmit = (data: LoginFormData) => {
 		if (!onSubmit) return;
@@ -59,7 +58,6 @@ const Login = ({ onSubmit, formData, error = false }: LoginFormProps) => {
 					title="Email"
 					defaultValue="ndmt1at21@gmail.com"
 					label="Email"
-					value={formData?.email}
 					helperText={errors.email?.message}
 					error={errors.email !== undefined}
 				/>
@@ -70,14 +68,13 @@ const Login = ({ onSubmit, formData, error = false }: LoginFormProps) => {
 					type="password"
 					id="password_textbox"
 					title="Password"
-					value={formData?.password}
 					defaultValue="12345678"
 					label="Password"
 					error={errors.password !== undefined}
 					helperText={errors.password?.message}
 				/>
 
-				<Button type="submit" className="mt-5">
+				<Button type="submit" className="py-4 mt-5 font-bold">
 					Login
 				</Button>
 			</div>
@@ -85,4 +82,4 @@ const Login = ({ onSubmit, formData, error = false }: LoginFormProps) => {
 	);
 };
 
-export default Login;
+export default LoginForm;

@@ -13,12 +13,26 @@ const items: SidebarItem[] = [
 	{
 		name: 'Class',
 		path: '/class',
-		icon: faGraduationCap
+		icon: faGraduationCap,
+		items: [
+			{
+				path: '/class/viewClasses',
+				name: 'View Classes',
+				icon: faList
+			}
+		]
 	},
 	{
-		name: 'User Management',
+		name: 'User',
 		path: '/user',
-		icon: faUsers
+		icon: faUsers,
+		items: [
+			{
+				path: '/user/viewUsers',
+				name: 'View Users',
+				icon: faList
+			}
+		]
 	},
 	{
 		name: 'Admin',
@@ -50,7 +64,7 @@ const AdminLayout = () => {
 				<Sidebar items={items} className="mt-10" />
 			</div>
 
-			<div className="px-5 py-2 overflow-auto">
+			<div className="flex-1 h-screen px-5 py-3 overflow-auto">
 				<Outlet />
 			</div>
 		</div>

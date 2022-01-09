@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 
 type AsyncExecuteStatus = 'idle' | 'pending' | 'success' | 'error';
 
@@ -9,6 +9,17 @@ const useAsync = <T, E = any>(
 	const [value, setValue] = useState<T | null>(null);
 	const [error, setError] = useState<E | null>(null);
 
+	const mountedRef = useRef<boolean>();
+
+	useEffect(() => {
+		mountedRef.current = true;
+
+		return () => {
+			console.log('run effect');
+			mountedRef.current = false;
+		};
+	}, []);
+
 	const execute = useCallback(
 		(...args) => {
 			setStatus('pending');
@@ -17,6 +28,7 @@ const useAsync = <T, E = any>(
 
 			return asyncFunction(...args)
 				.then((response: any) => {
+					if (!mountedRef.current) return null;
 					setValue(response);
 					setStatus('success');
 				})
