@@ -5,18 +5,20 @@ import {
 	faScrewdriverWrench,
 	faUsers
 } from '@fortawesome/free-solid-svg-icons';
+import { Skeleton } from '@mui/material';
+import { Suspense } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import SidebarItem from '../components/Sidebar/type';
+import ROUTES from '../constants/route';
 
 const items: SidebarItem[] = [
 	{
 		name: 'Class',
-		path: '/class',
 		icon: faGraduationCap,
 		items: [
 			{
-				path: '/class/viewClasses',
+				path: ROUTES.CLASS_VIEW_LIST,
 				name: 'View Classes',
 				icon: faList
 			}
@@ -24,11 +26,11 @@ const items: SidebarItem[] = [
 	},
 	{
 		name: 'User',
-		path: '/user',
 		icon: faUsers,
+		activePaths: [ROUTES.USER_DETAIL],
 		items: [
 			{
-				path: '/user/viewUsers',
+				path: ROUTES.USER_VIEW_LIST,
 				name: 'View Users',
 				icon: faList
 			}
@@ -36,22 +38,30 @@ const items: SidebarItem[] = [
 	},
 	{
 		name: 'Admin',
-		path: '/admin',
 		icon: faScrewdriverWrench,
 		items: [
 			{
-				path: '/admin/viewAdmins',
+				path: ROUTES.ADMIN_VIEW_LIST,
 				name: 'View Admins',
 				icon: faList
 			},
 			{
-				path: '/admin/addAdmin',
+				path: ROUTES.ADMIN_ADD,
 				name: 'Add Admin',
 				icon: faAdd
 			}
 		]
 	}
 ];
+
+const FallbackSkeleton = () => {
+	return (
+		<div className="flex flex-col gap-5">
+			<Skeleton variant="text" height={70} />
+			<Skeleton variant="rectangular" height={300} />
+		</div>
+	);
+};
 
 const AdminLayout = () => {
 	return (
@@ -65,7 +75,9 @@ const AdminLayout = () => {
 			</div>
 
 			<div className="flex-1 h-screen px-5 py-3 overflow-auto">
-				<Outlet />
+				<Suspense fallback={<FallbackSkeleton />}>
+					<Outlet />
+				</Suspense>
 			</div>
 		</div>
 	);

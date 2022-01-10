@@ -12,9 +12,7 @@ const LoginPage = () => {
 	const navigate = useNavigate();
 	const { currentUser, login } = useAuth();
 	const { addMessage } = useAlert();
-	const { execute, status, value, error } = useAsync((data: LoginFormData) =>
-		login(data)
-	);
+	const { execute, status, error, pendingTime } = useAsync((data: LoginFormData) => login(data));
 
 	useEffect(() => {
 		if (status !== 'error') return;
@@ -37,13 +35,11 @@ const LoginPage = () => {
 	return (
 		<div className="flex items-center justify-center w-screen h-screen">
 			<div className="-mt-5">
-				<div className="mb-16 text-5xl font-black text-center font-logo ">
-					Gradebook
-				</div>
+				<div className="mb-16 text-5xl font-black text-center font-logo ">Gradebook</div>
 				<Login error={status === 'error'} onSubmit={onSubmit} />
 			</div>
 
-			{status === 'pending' && (
+			{status === 'pending' && pendingTime >= 1 && (
 				<FullScreenBackdrop className="flex items-center justify-center bg-gray-900 opacity-60">
 					<CircularProgress />
 				</FullScreenBackdrop>

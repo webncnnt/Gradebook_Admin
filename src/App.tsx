@@ -1,3 +1,4 @@
+import { BrowserRouter } from 'react-router-dom';
 import './App.css';
 import AlertNotification from './components/AlertNotification';
 import { AlertProvider } from './context/AlertContext';

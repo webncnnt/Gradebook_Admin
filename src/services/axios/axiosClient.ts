@@ -1,7 +1,10 @@
 import axios from 'axios';
 
 const axiosClient = axios.create({
-	baseURL: 'http://localhost:8000/api'
+	baseURL:
+		process.env.NODE_ENV === 'production'
+			? process.env.REACT_APP_PROD_API_PREFIX
+			: process.env.REACT_APP_DEV_API_PREFIX
 });
 
 axiosClient.interceptors.request.use(async (config) => {

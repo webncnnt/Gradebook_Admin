@@ -3,6 +3,9 @@ import { UserModel } from '../../types/models/userModel';
 import axiosClient from '../axios/axiosClient';
 
 const userApi = {
+	getMe: async () => {
+		return await axiosClient.get('/profile/me');
+	},
 	getUsers: async (params: ListFetchParams) => {
 		return await axiosClient.get(`/users`, { params });
 	},

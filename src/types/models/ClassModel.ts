@@ -1,15 +1,13 @@
 type ClassModel = {
 	id: number;
-	clsName: string;
+	className: string;
 	ownerId: number;
 	inviteCode: string;
-	coverImage: string | null;
-	description: string | null;
-	status: number;
-	expiredTime: Date | null;
+	coverImage?: string | null;
+	description?: string;
+	status: 'active' | 'blocked';
+	expiredTime?: Date;
 	createdAt: Date;
-	updatedAt: Date;
-	deletedAt: Date;
 };
 
 export default ClassModel;

@@ -9,7 +9,7 @@ const NotFoundPage = () => (
 		</div>
 		<div className="mt-5 text-xl">Trang bạn tìm kiếm không khả dụng</div>
 		<Link to="/">
-			<Button className="px-4 mt-3">Quay lại trang chủ</Button>
+			<Button className="px-4 py-3 mt-3">Quay lại trang chủ</Button>
 		</Link>
 	</div>
 );

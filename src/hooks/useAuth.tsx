@@ -6,12 +6,13 @@ const useAuth = () => {
 
 	if (!value) throw new Error('useAuth must be used within an AuthProvider');
 
-	const { currentUser, login, logout } = value;
+	const { currentUser, login, logout, revalidating } = value;
 
 	return {
 		currentUser,
 		login,
-		logout
+		logout,
+		revalidating
 	};
 };
 

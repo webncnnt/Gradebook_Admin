@@ -17,7 +17,7 @@ const AuthGuard = ({ redirectTo, role = 'guest' }: AuthGuardProps) => {
 			return null;
 		}
 
-		return <Navigate to={redirectTo} replace />;
+		return <Navigate to={redirectTo} state={{ from: location }} replace />;
 	}
 
 	if (currentRole !== role && !redirectTo) {

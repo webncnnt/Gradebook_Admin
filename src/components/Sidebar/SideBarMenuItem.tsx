@@ -1,4 +1,4 @@
-import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
+import { faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import React, { useState } from 'react';
@@ -39,32 +39,36 @@ const SideBarMenuItem = ({
 		onMenuClick?.(item);
 	};
 
-	const renderContent = () => {
+	const renderCollapseIcon = () => {
+		const classes = classNames(collapsed ? '-rotate-180' : 'rotate-0', 'transition-all');
+		return (
+			<div className={classes}>
+				<FontAwesomeIcon size="sm" icon={faAngleUp} />
+			</div>
+		);
+	};
+
+	const renderItem = () => {
 		return (
 			<div className={classes} onClick={handleMenuClick}>
 				<FontAwesomeIcon icon={item.icon} />
 				<div className="flex-1 ml-4">
 					<span>{item.name}</span>
 				</div>
-				{children &&
-					(collapsed ? (
-						<FontAwesomeIcon size="sm" icon={faAngleUp} />
-					) : (
-						<FontAwesomeIcon size="sm" icon={faAngleDown} />
-					))}
+				{children && renderCollapseIcon()}
 			</div>
 		);
 	};
 
+	const renderCollapseContent = () => {
+		const classes = classNames(collapsed ? 'h-0' : 'h-fit', 'origin-top transition-all px-5');
+		return <div className={classes}>{children}</div>;
+	};
+
 	return (
 		<div className={className} {...rest}>
-			{item.items ? (
-				renderContent()
-			) : (
-				<NavLink to={item.path}>{renderContent()}</NavLink>
-			)}
-
-			{collapsed && <div className="pl-5">{children}</div>}
+			{item.path ? <NavLink to={item.path}>{renderItem()}</NavLink> : renderItem()}
+			{renderCollapseContent()}
 		</div>
 	);
 };

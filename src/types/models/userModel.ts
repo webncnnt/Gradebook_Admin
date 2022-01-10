@@ -1,6 +1,6 @@
 export type UserModel = {
 	id: number;
-	fullname: string;
+	fullName: string;
 	email: string;
 	avatar?: string;
 	dob?: Date;

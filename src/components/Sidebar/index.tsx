@@ -1,5 +1,5 @@
-import { HTMLAttributes, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { HTMLAttributes } from 'react';
+import { matchPath, useLocation } from 'react-router-dom';
 import SideBarMenuItem from './SideBarMenuItem';
 import SidebarItem from './type';
 
@@ -9,24 +9,37 @@ type SidebarProps = {
 
 const Sidebar = ({ items, className, ...rest }: SidebarProps) => {
 	const location = useLocation();
-	const [activePath, setActivePath] = useState<string | null>(null);
-
-	useEffect(() => {
-		setActivePath(location.pathname);
-	}, [location]);
 
 	const handleClick = (item: SidebarItem) => {
 		console.log(item);
 	};
 
+	const checkMenuItemActive = (item: SidebarItem): boolean => {
+		if (!item.path) {
+			return false;
+		}
+
+		if (matchPath(location.pathname, item.path)) {
+			return true;
+		}
+
+		if (item.activePaths) {
+			return item.activePaths.some(
+				(activePath) => matchPath(activePath, location.pathname) !== null
+			);
+		}
+
+		return false;
+	};
+
 	const createSideBarMenuItem = (item: SidebarItem) => {
-		const isActive = activePath === item.path && !item.items;
+		const isActive = checkMenuItemActive(item);
 
 		return (
 			<SideBarMenuItem
 				className={isActive ? 'text-blue-700' : 'text-gray-500'}
 				item={item}
-				key={item.path}
+				key={item.path || item.name}
 				active={isActive}
 				onMenuClick={handleClick}
 			>

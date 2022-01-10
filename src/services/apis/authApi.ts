@@ -7,11 +7,7 @@ const authApi = {
 	postForgotPassword: async (email: string) => {
 		return await axiosClient.post('/auth/forgot', { email });
 	},
-	postChangePassword: async (
-		id: number,
-		oldPassword: string,
-		newPassword: string
-	) => {
+	postChangePassword: async (id: number, oldPassword: string, newPassword: string) => {
 		return await axiosClient.post(`/auth/changePwd/${id}`, {
 			oldPass: oldPassword,
 			newPass: newPassword

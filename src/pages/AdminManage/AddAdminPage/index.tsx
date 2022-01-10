@@ -28,7 +28,6 @@ const AddAdminPage = () => {
 		if (status !== 'success') return;
 		if (value === null) return;
 
-		console.log(value);
 		addMessage('Admin created successfully', 'success');
 
 		const timer = setTimeout(() => {
