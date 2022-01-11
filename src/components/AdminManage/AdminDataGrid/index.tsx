@@ -1,32 +1,28 @@
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useState } from 'react';
-import { UserModel } from '../../types/models/userModel';
+import { UserModel } from '../../../types/models/userModel';
 
 const columns: GridColDef[] = [
 	{ field: 'id', headerName: 'ID', width: 90 },
 	{
-		field: 'clsName',
-		headerName: 'Class Name',
-		width: 250
-	},
-	{
-		field: 'ownerId',
-		headerName: 'Owner ID',
+		field: 'fullname',
+		headerName: 'Full Name',
 		width: 150
 	},
 	{
-		field: 'inviteCode',
-		headerName: 'Invite Code',
+		field: 'email',
+		headerName: 'Email',
 		width: 150
 	},
 	{
-		field: 'expiredTime',
-		headerName: 'Expired Time',
-		width: 200
+		field: 'dob',
+		headerName: 'Birthday',
+		type: 'date',
+		width: 110
 	}
 ];
 
-const ClassDataGrid = () => {
+const AdminDataGrid = () => {
 	const [pageSize, setPageSize] = useState<number>(5);
 	const [rows, setRows] = useState<UserModel[]>([]);
 
@@ -51,4 +47,4 @@ const ClassDataGrid = () => {
 	);
 };
 
-export default ClassDataGrid;
+export default AdminDataGrid;

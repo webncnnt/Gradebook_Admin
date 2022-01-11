@@ -1,9 +1,9 @@
 import { TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
-import useAlert from '../../hooks/useAlert';
-import useAsync from '../../hooks/useAsync';
-import userApi from '../../services/apis/userApi';
-import { UserModel } from '../../types/models/userModel';
+import useAlert from '../../../hooks/useAlert';
+import useAsync from '../../../hooks/useAsync';
+import userApi from '../../../services/apis/userApi';
+import { UserModel } from '../../../types/models/userModel';
 
 type UserInforProps = {
 	userId: string;

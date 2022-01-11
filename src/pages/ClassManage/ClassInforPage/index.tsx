@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import ClassInfor from '../../../components/ClassInfor';
+import ClassInfor from '../../../components/ClassManage/ClassInfor';
 
 const ClassInforPage = () => {
 	const { classId } = useParams();

@@ -1,5 +1,5 @@
 type ListFetchParams = {
-	query: string;
+	query?: string;
 	page?: number;
 	limit?: number;
 };

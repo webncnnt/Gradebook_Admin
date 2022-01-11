@@ -1,5 +1,5 @@
 import { Navigate, useParams } from 'react-router-dom';
-import UserInfor from '../../../components/UserInfor';
+import UserInfor from '../../../components/UserManage/UserInfor';
 
 const UserInforPage = () => {
 	const { id } = useParams();

@@ -46,8 +46,17 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 	}, [status, value]);
 
 	useEffect(() => {
-		if (status === 'error' || status === 'success') setRevalidating(false);
-	}, [status, value, error]);
+		if (status === 'success') {
+			setRevalidating(false);
+		}
+	}, [status, value]);
+
+	useEffect(() => {
+		if (status === 'error') {
+			localStorage.removeItem('access_token');
+			setRevalidating(false);
+		}
+	}, [status, error]);
 
 	const login = useCallback(async (formData: LoginFormData) => {
 		const res = await authApi.postLogin(formData.email, formData.password);

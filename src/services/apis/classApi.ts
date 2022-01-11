@@ -3,10 +3,10 @@ import ListFetchParams from '../../types/ListFetchParams';
 
 const classApi = {
 	getClasses: async (params: ListFetchParams) => {
-		return await axiosClient.get(`/classes`, { params });
+		return await axiosClient.get(`/admin/classes`, { params });
 	},
 	getClass: async (id: number) => {
-		return await axiosClient.get(`/classes/${id}`);
+		return await axiosClient.get(`/admin/classes/${id}`);
 	}
 };
 

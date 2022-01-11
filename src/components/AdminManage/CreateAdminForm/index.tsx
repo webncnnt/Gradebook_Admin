@@ -2,7 +2,7 @@ import { TextField } from '@mui/material';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
-import RegisterAdminFormData from '../../types/form/RegisterAdminFormData';
+import RegisterAdminFormData from '../../../types/form/RegisterAdminFormData';
 
 type CreateAdminFormProps = {
 	onSubmit?: (data: RegisterAdminFormData) => void;
@@ -21,10 +21,7 @@ const schema = Yup.object().shape({
 	password: Yup.string()
 		.required('Password is required')
 		.min(6, 'Password must be at least 6 characters'),
-	passwordConfirmation: Yup.string().oneOf(
-		[Yup.ref('password'), null],
-		'Passwords must match'
-	)
+	passwordConfirmation: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match')
 });
 
 const INITIAL_ADMIN_FORM_DATA = {

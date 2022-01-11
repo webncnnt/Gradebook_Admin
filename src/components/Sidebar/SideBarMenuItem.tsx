@@ -61,7 +61,10 @@ const SideBarMenuItem = ({
 	};
 
 	const renderCollapseContent = () => {
-		const classes = classNames(collapsed ? 'h-0' : 'h-fit', 'origin-top transition-all px-5');
+		const classes = classNames(
+			collapsed ? 'max-h-0 opacity-0 invisible' : 'max-h-24 opacity-100 visible',
+			'transition-all pl-5'
+		);
 		return <div className={classes}>{children}</div>;
 	};
 

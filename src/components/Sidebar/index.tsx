@@ -1,4 +1,4 @@
-import { HTMLAttributes } from 'react';
+import { HTMLAttributes, useMemo } from 'react';
 import { matchPath, useLocation } from 'react-router-dom';
 import SideBarMenuItem from './SideBarMenuItem';
 import SidebarItem from './type';
@@ -37,7 +37,7 @@ const Sidebar = ({ items, className, ...rest }: SidebarProps) => {
 
 		return (
 			<SideBarMenuItem
-				className={isActive ? 'text-blue-700' : 'text-gray-500'}
+				className={isActive ? 'text-blue-700 pointer-events-none' : 'text-gray-500'}
 				item={item}
 				key={item.path || item.name}
 				active={isActive}
@@ -48,9 +48,13 @@ const Sidebar = ({ items, className, ...rest }: SidebarProps) => {
 		);
 	};
 
+	const renderMenuItems = useMemo(() => {
+		return <ul>{items.map((item) => createSideBarMenuItem(item))}</ul>;
+	}, [location.pathname]);
+
 	return (
 		<div className={className} {...rest}>
-			<ul>{items.map((item) => createSideBarMenuItem(item))}</ul>
+			{renderMenuItems}
 		</div>
 	);
 };

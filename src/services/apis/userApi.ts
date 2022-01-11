@@ -7,13 +7,13 @@ const userApi = {
 		return await axiosClient.get('/profile/me');
 	},
 	getUsers: async (params: ListFetchParams) => {
-		return await axiosClient.get(`/users`, { params });
+		return await axiosClient.get(`/admin/users`, { params });
 	},
 	getUser: async (id: number) => {
-		return await axiosClient.get(`/users/${id}`);
+		return await axiosClient.get(`/admin/users/${id}`);
 	},
 	patchUser: async (user: UserModel) => {
-		return await axiosClient.patch(`/users/${user.id}`, user);
+		return await axiosClient.patch(`/admin/users/${user.id}`, user);
 	}
 };
 

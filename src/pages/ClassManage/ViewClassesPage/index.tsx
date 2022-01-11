@@ -1,4 +1,4 @@
-import ClassDataGrid from '../../../components/ClassDataGrid';
+import ClassDataGrid from '../../../components/ClassManage/ClassDataGrid';
 import AdminContentLayout from '../../../layouts/AdminContentLayout';
 
 const ViewClassesPage = () => {

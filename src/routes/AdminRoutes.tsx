@@ -21,19 +21,19 @@ const AdminRoutes = () => {
 					<Route path={ROUTES.ROOT} element={<Navigate to={ROUTES.CLASS} />} />
 
 					<Route path={ROUTES.ADMIN}>
-						<Route path={ROUTES.ADMIN} element={<Navigate to={ROUTES.ADMIN_VIEW_LIST} />} />
+						<Route index element={<Navigate to={ROUTES.ADMIN_VIEW_LIST} />} />
 						<Route path={ROUTES.ADMIN_VIEW_LIST} element={<ViewAdminsPage />} />
 						<Route path={ROUTES.ADMIN_ADD} element={<AddAdminPage />} />
 					</Route>
 
 					<Route path={ROUTES.USER}>
-						<Route path={ROUTES.USER} element={<Navigate to={ROUTES.USER_VIEW_LIST} />} />
+						<Route index element={<Navigate to={ROUTES.USER_VIEW_LIST} />} />
 						<Route path={ROUTES.USER_VIEW_LIST} element={<ViewUsersPage />} />
 						<Route path={ROUTES.USER_DETAIL} element={<UserInforPage />} />
 					</Route>
 
 					<Route path={ROUTES.CLASS}>
-						<Route path={ROUTES.CLASS} element={<Navigate to={ROUTES.CLASS_VIEW_LIST} />} />
+						<Route index element={<Navigate to={ROUTES.CLASS_VIEW_LIST} />} />
 						<Route path={ROUTES.CLASS_VIEW_LIST} element={<ViewClassesPage />} />
 						<Route path={ROUTES.CLASS_DETAIL} element={<ClassInforPage />} />
 					</Route>

@@ -30,7 +30,7 @@ const useAsync = <T, E = any>(asyncFunction: (...args: any[]) => Promise<T>) => 
 			}, 1000);
 
 			return asyncFunction(...args)
-				.then((response: any) => {
+				.then((response: T) => {
 					if (!mountedRef.current) return null;
 					setValue(response);
 					setStatus('success');

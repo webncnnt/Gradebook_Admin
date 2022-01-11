@@ -1,7 +1,7 @@
 import { CircularProgress } from '@mui/material';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CreateAdminForm from '../../../components/CreateAdminForm';
+import CreateAdminForm from '../../../components/AdminManage/CreateAdminForm';
 import FullScreenBackdrop from '../../../components/FullScreenBackdrop';
 import useAlert from '../../../hooks/useAlert';
 import useAsync from '../../../hooks/useAsync';
@@ -12,9 +12,8 @@ import RegisterAdminFormData from '../../../types/form/RegisterAdminFormData';
 const AddAdminPage = () => {
 	const navigate = useNavigate();
 	const { addMessage } = useAlert();
-	const { execute, status, value, error } = useAsync(
-		async (formData: RegisterAdminFormData) =>
-			adminApi.postCreateAdmin(formData)
+	const { execute, status, value, error } = useAsync(async (formData: RegisterAdminFormData) =>
+		adminApi.postCreateAdmin(formData)
 	);
 
 	useEffect(() => {
@@ -36,7 +35,7 @@ const AddAdminPage = () => {
 
 		return () => clearTimeout(timer);
 
-		//eslint-disable-next-line: react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [status, value]);
 
 	const handleSubmit = (formData: RegisterAdminFormData) => {

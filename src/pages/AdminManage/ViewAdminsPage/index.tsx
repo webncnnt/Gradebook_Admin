@@ -1,4 +1,4 @@
-import AdminDataGrid from '../../../components/AdminDataGrid';
+import AdminDataGrid from '../../../components/AdminManage/AdminDataGrid';
 import AdminContentLayout from '../../../layouts/AdminContentLayout';
 
 const ViewAdminsPage = () => {

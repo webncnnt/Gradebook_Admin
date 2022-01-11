@@ -5,17 +5,17 @@ import axiosClient from '../axios/axiosClient';
 
 const adminApi = {
 	getAdmins: async (params: ListFetchParams) => {
-		return await axiosClient.get(`/admins`, { params });
+		return await axiosClient.get(`/admin/admins`, { params });
 	},
 	getAdmin: async (id: number) => {
-		return await axiosClient.get(`/admins/${id}`);
+		return await axiosClient.get(`/admin/admins/${id}`);
 	},
 	postCreateAdmin: async (formData: RegisterAdminFormData) => {
-		return await axiosClient.post(`/auth/register`, formData);
+		return await axiosClient.post(`/admin/admins`, formData);
 	},
 	patchUpdateAdmin: async (formData: UpdateAdminFormData) => {
 		// TODO
-		return await axiosClient.patch(`/admins`, formData);
+		return await axiosClient.patch(`/admin/admins`, formData);
 	}
 };
 
