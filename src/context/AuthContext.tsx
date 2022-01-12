@@ -21,7 +21,7 @@ const AuthContext = React.createContext<AuthContextType | null>(null);
 const AuthProvider = ({ children }: AuthProviderProps) => {
 	const [currentUser, setCurrentUser] = useState<UserModel | null>(null);
 	const [revalidating, setRevalidating] = useState(true);
-	const { execute, status, value, error } = useAsync(() => userApi.getMe());
+	const { execute, status, value, error } = useAsync(userApi.getMe);
 
 	useEffect(() => {
 		const accessToken = localStorage.getItem('access_token');

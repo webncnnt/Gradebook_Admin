@@ -1,11 +1,18 @@
-import { DataGrid, GridColDef, GridSelectionModel, GridSortModel } from '@mui/x-data-grid';
-import { HTMLAttributes, useEffect, useMemo, useState } from 'react';
-import { useLocation, useSearchParams } from 'react-router-dom';
-import { UserModel } from '../../../types/models/userModel';
+import {
+	DataGrid,
+	GridCellEditCommitParams,
+	GridColDef,
+	GridSelectionModel,
+	GridSortModel
+} from '@mui/x-data-grid';
+import { HTMLAttributes, useEffect, useState } from 'react';
 import Button from '../../Button';
-import queryString from 'query-string';
-import UserFilterValue from '../../../types/filter/UserFilterValue';
 import moment from 'moment';
+import useAlert from '../../../hooks/useAlert';
+import UserFilterValue from '../../../types/filter/UserFilterValue';
+import { UserModel } from '../../../types/models/userModel';
+import useListFetch from '../../../hooks/useListFetch';
+import userApi from '../../../services/apis/userApi';
 
 const columns: GridColDef[] = [
 	{ field: 'id', headerName: 'ID', width: 70 },
@@ -26,107 +33,108 @@ const columns: GridColDef[] = [
 		editable: true
 	},
 	{
-		field: 'birth',
-		headerName: 'Birthday',
-		type: 'date',
-		width: 150
-	},
-	{
 		field: 'createdAt',
 		headerName: 'Created At',
 		type: 'date',
-		width: 150,
+		width: 200,
 		valueFormatter: (params) => moment(params.value as Date).format('DD/MM/YYYY HH:mm:ss')
+	},
+	{
+		field: 'Status',
+		headerName: 'Status',
+		width: 100,
+		valueFormatter: (params) => (params.value === 'blocked' ? 'Blocked' : 'Active')
 	}
 ];
 
 type UserDataGridProps = {
-	rows: UserModel[];
-	rowCount: number;
-	onRowClick?: (user: UserModel) => void;
+	filterValue: UserFilterValue;
+	onFilterChange: (filterValue: UserFilterValue) => void;
 } & HTMLAttributes<HTMLDivElement>;
 
-const UserDataGrid = ({ rows, rowCount, onRowClick, ...rest }: UserDataGridProps) => {
-	const location = useLocation();
-	const [, setSearchParams] = useSearchParams();
+const UserDataGrid = ({ filterValue, onFilterChange, ...rest }: UserDataGridProps) => {
+	const { addMessage } = useAlert();
+	const [users, setUsers] = useState<UserModel[]>([]);
 
-	const initialParams = useMemo<UserFilterValue>(() => {
-		const { page, limit, name, email, sortBy, order } = queryString.parse(location.search);
-		const values: UserFilterValue = {};
+	const { execute, listData, status, count, error } = useListFetch<UserModel>(
+		async () => userApi.getUsers(filterValue),
+		(data) => data.data.users
+	);
 
-		values.page = page ? +page : 1;
-		values.limit = limit ? +limit : 5;
-		values.sortBy = sortBy && !Array.isArray(sortBy) ? sortBy : undefined;
-		values.order = order === 'asc' || order === 'desc' ? order : undefined;
-		values.email = email && !Array.isArray(email) ? email : undefined;
-		values.name = name && !Array.isArray(name) ? name : undefined;
-		values.email = email && !Array.isArray(email) ? email : undefined;
-
-		return values;
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-
-	const [filterValue, setFilterValue] = useState<UserFilterValue>(initialParams);
-	const [hasSelectedRow, setHasSelectedRow] = useState<boolean>(false);
-
-	const [sortModel, setSortModel] = useState<GridSortModel>([
-		{
-			field: 'id',
-			sort: 'asc'
-		}
-	]);
+	const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
+	const [sortModel, setSortModel] = useState<GridSortModel>([]);
 
 	useEffect(() => {
-		setSearchParams(queryString.stringify(filterValue));
+		execute();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [filterValue]);
 
 	useEffect(() => {
-		if (sortModel.length < 0) return;
-		const { field, sort } = sortModel[0];
+		status === 'success' && setUsers(listData);
+	}, [status, listData]);
 
-		if (field && sort) setFilterValue((value) => ({ ...value, sortBy: field, order: sort }));
+	useEffect(() => {
+		status === 'error' && addMessage(error.data.message, 'error');
+	}, [status, error, addMessage]);
+
+	useEffect(() => {
+		if (sortModel.length > 0) {
+			const { field, sort } = sortModel[0];
+			field && sort && onFilterChange({ ...filterValue, sortBy: field, order: sort });
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sortModel]);
 
 	const handleSelectionChange = (selectionModel: GridSelectionModel) => {
-		setHasSelectedRow(selectionModel.length !== 0);
+		setSelectionModel(selectionModel);
 	};
 
 	const handlePageSizeChange = (pageSize: number) => {
-		setFilterValue((value) => ({ ...value, limit: pageSize }));
+		onFilterChange({ ...filterValue, limit: pageSize });
 	};
 
 	const handlePageChange = (page: number) => {
-		setFilterValue((value) => ({ ...value, page: page + 1 }));
+		onFilterChange({ ...filterValue, page: page + 1 });
 	};
 
 	const handleSortModelChange = (gridSortModel: GridSortModel) => {
 		setSortModel(gridSortModel);
 	};
 
+	const handleBlockUserClick = () => {};
+
+	const handleStudentIdCommit = (commitParams: GridCellEditCommitParams) => {};
+
 	return (
 		<div {...rest}>
-			<Button disabled={!hasSelectedRow} className="px-6 py-2 disabled:bg-gray-500" color="alert">
-				Lock
+			<Button
+				onClick={handleBlockUserClick}
+				disabled={selectionModel.length === 0}
+				className="px-6 py-2 disabled:bg-gray-500"
+				color="alert"
+			>
+				Block
 			</Button>
 			<div className="mt-3">
 				<DataGrid
-					rows={rows}
+					rows={users}
 					sortingOrder={['asc', 'desc']}
 					sortModel={sortModel}
 					columns={columns}
 					pageSize={filterValue.limit}
 					onSelectionModelChange={handleSelectionChange}
 					autoHeight
+					sortingMode="server"
 					rowsPerPageOptions={[5, 10, 15, 20]}
 					onPageSizeChange={handlePageSizeChange}
 					checkboxSelection
 					onSortModelChange={handleSortModelChange}
 					page={filterValue.page !== undefined ? filterValue.page - 1 : filterValue.page}
 					paginationMode="server"
-					rowCount={rowCount}
+					rowCount={count}
 					onPageChange={handlePageChange}
 					disableSelectionOnClick
+					onCellEditCommit={handleStudentIdCommit}
 					isCellEditable={(cell) => cell.field === 'studentId'}
 				/>
 			</div>

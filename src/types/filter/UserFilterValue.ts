@@ -1,10 +1,8 @@
+import FilterBase from './FilterBase';
+
 type UserFilterValue = {
-	page?: number;
-	limit?: number;
-	order?: 'asc' | 'desc';
-	sortBy?: string;
 	email?: string;
 	name?: string;
-};
+} & FilterBase;
 
 export default UserFilterValue;

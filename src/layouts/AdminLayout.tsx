@@ -71,7 +71,7 @@ const AdminLayout = () => {
 					<h1 className="mx-5 my-3 text-xl font-black font-logo">Gradebook</h1>
 				</NavLink>
 
-				<Sidebar items={items} className="mt-10" />
+				<Sidebar items={items} className="mt-10 text-base" />
 			</div>
 
 			<div className="flex-1 h-screen px-5 py-3 overflow-auto">

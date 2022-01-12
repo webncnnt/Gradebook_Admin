@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 
-type AsyncExecuteStatus = 'idle' | 'pending' | 'success' | 'error';
+export type AsyncExecuteStatus = 'idle' | 'pending' | 'success' | 'error';
 
 const useAsync = <T, E = any>(asyncFunction: (...args: any[]) => Promise<T>) => {
 	const [status, setStatus] = useState<AsyncExecuteStatus>('idle');

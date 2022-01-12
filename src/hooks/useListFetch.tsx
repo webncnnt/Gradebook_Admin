@@ -1,9 +1,7 @@
 import { AxiosResponse } from 'axios';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import ListFetchParams from '../types/ListFetchParams';
 import useAsync from './useAsync';
-import queryString from 'query-string';
-import { useLocation } from 'react-router-dom';
 
 export type ListFetchData<T> = {
 	data: T[];
@@ -22,14 +20,8 @@ const useListFetch = <T,>(
 		[]
 	);
 
-	const location = useLocation();
-	const { execute: asyncExecute, status, value, error, pendingTime } = useAsync(asyncApi);
+	const { execute, status, value, error, pendingTime } = useAsync(asyncApi);
 	const [fetchedData, setFetchedData] = useState<ListFetchData<T>>(initialFetchData);
-	const [params, setParams] = useState<ListFetchParams>({});
-
-	useEffect(() => {
-		setParams(queryString.parse(location.search, { parseNumbers: true }));
-	}, [location.search]);
 
 	useEffect(() => {
 		if (status !== 'success') return;
@@ -37,10 +29,6 @@ const useListFetch = <T,>(
 		setFetchedData({ data: transform(value.data), total: +value.headers['x-total-count'] });
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [status, value]);
-
-	const execute = useCallback(() => {
-		return asyncExecute(params);
-	}, [asyncExecute, params]);
 
 	const { data, total } = fetchedData;
 

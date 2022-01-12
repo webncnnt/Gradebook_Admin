@@ -44,7 +44,11 @@ const AddAdminPage = () => {
 
 	return (
 		<AdminContentLayout header="Add Admin">
-			<CreateAdminForm onSubmit={handleSubmit} />;
+			<CreateAdminForm
+				className="px-5 pb-5 bg-white rounded-md shadow-md pt-7"
+				onSubmit={handleSubmit}
+			/>
+			;
 			{status === 'pending' && (
 				<FullScreenBackdrop className="flex items-center justify-center bg-gray-900 opacity-60">
 					<CircularProgress />

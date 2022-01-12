@@ -1,8 +1,8 @@
+import FilterBase from './FilterBase';
+
 type ClassFilterValue = {
-	page?: number;
-	limit?: number;
 	sort?: string;
 	name?: string;
-};
+} & FilterBase;
 
 export default ClassFilterValue;

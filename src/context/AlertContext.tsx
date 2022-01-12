@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { AlertMessage, AlertType } from '../types/AlertMessage';
 
-type AuthContextType = {
+type AlertContextType = {
 	messages: AlertMessage[];
 	addMessage: (message: string, type: AlertType) => void;
 	removeMessage: (message: string, type: AlertType) => void;
@@ -11,9 +11,7 @@ type AlertProviderProps = {
 	children: any;
 };
 
-const AlertContext = React.createContext<AuthContextType>(
-	{} as AuthContextType
-);
+const AlertContext = React.createContext<AlertContextType>({} as AlertContextType);
 
 const AlertProvider = ({ children }: AlertProviderProps) => {
 	const [messages, setMessages] = useState<AlertMessage[]>([]);
@@ -23,9 +21,7 @@ const AlertProvider = ({ children }: AlertProviderProps) => {
 	}, []);
 
 	const removeMessage = useCallback((message: string, type: AlertType) => {
-		setMessages((messages) =>
-			messages.filter((m) => m.message !== message && m.type !== type)
-		);
+		setMessages((messages) => messages.filter((m) => m.message !== message && m.type !== type));
 	}, []);
 
 	return (

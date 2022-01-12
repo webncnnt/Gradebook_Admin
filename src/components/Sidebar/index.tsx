@@ -48,9 +48,11 @@ const Sidebar = ({ items, className, ...rest }: SidebarProps) => {
 		);
 	};
 
-	const renderMenuItems = useMemo(() => {
-		return <ul>{items.map((item) => createSideBarMenuItem(item))}</ul>;
-	}, [location.pathname]);
+	const renderMenuItems = useMemo(
+		() => <ul>{items.map((item) => createSideBarMenuItem(item))}</ul>,
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[location.pathname]
+	);
 
 	return (
 		<div className={className} {...rest}>

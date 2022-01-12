@@ -1,8 +1,8 @@
 import axiosClient from '../axios/axiosClient';
-import ListFetchParams from '../../types/ListFetchParams';
+import ClassFilterValue from '../../types/filter/ClassFilterValue';
 
 const classApi = {
-	getClasses: async (params: ListFetchParams) => {
+	getClasses: async (params: ClassFilterValue) => {
 		return await axiosClient.get(`/admin/classes`, { params });
 	},
 	getClass: async (id: number) => {

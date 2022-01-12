@@ -3,10 +3,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import RegisterAdminFormData from '../../../types/form/RegisterAdminFormData';
+import { HTMLAttributes } from 'react';
 
 type CreateAdminFormProps = {
 	onSubmit?: (data: RegisterAdminFormData) => void;
-};
+} & Omit<HTMLAttributes<HTMLDivElement>, 'onSubmit'>;
 
 const schema = Yup.object().shape({
 	fullname: Yup.string()
@@ -31,12 +32,13 @@ const INITIAL_ADMIN_FORM_DATA = {
 	passwordConfirmation: ''
 } as RegisterAdminFormData;
 
-const CreateAdminForm = ({ onSubmit }: CreateAdminFormProps) => {
+const CreateAdminForm = ({ onSubmit, ...rest }: CreateAdminFormProps) => {
 	const {
 		register,
 		handleSubmit,
 		setFocus,
 		reset,
+		clearErrors,
 		formState: { errors }
 	} = useForm<RegisterAdminFormData>({
 		defaultValues: INITIAL_ADMIN_FORM_DATA,
@@ -53,16 +55,18 @@ const CreateAdminForm = ({ onSubmit }: CreateAdminFormProps) => {
 
 	const handleResetForm = () => {
 		reset(INITIAL_ADMIN_FORM_DATA);
+		clearErrors(['email', 'fullname', 'password', 'passwordConfirmation']);
 		setFocus('fullname');
 	};
 
 	return (
-		<div>
+		<div {...rest}>
 			<form
 				className="flex flex-col gap-4 lg:w-2/3"
 				onSubmit={handleSubmit(handleRegisterFormSubmit)}
 			>
 				<TextField
+					size="small"
 					{...register('fullname')}
 					autoFocus
 					label="Full Name (*)"
@@ -73,6 +77,7 @@ const CreateAdminForm = ({ onSubmit }: CreateAdminFormProps) => {
 					}}
 				/>
 				<TextField
+					size="small"
 					{...register('email')}
 					label="Email (*)"
 					helperText={errors.email?.message}
@@ -82,6 +87,7 @@ const CreateAdminForm = ({ onSubmit }: CreateAdminFormProps) => {
 					}}
 				/>
 				<TextField
+					size="small"
 					{...register('password')}
 					type="password"
 					label="Password (*)"
@@ -92,6 +98,7 @@ const CreateAdminForm = ({ onSubmit }: CreateAdminFormProps) => {
 					}}
 				/>
 				<TextField
+					size="small"
 					{...register('passwordConfirmation')}
 					type="password"
 					label="Confirm Password (*)"
@@ -105,12 +112,12 @@ const CreateAdminForm = ({ onSubmit }: CreateAdminFormProps) => {
 				<div className="flex flex-row gap-1 mt-3">
 					<button
 						type="submit"
-						className="py-3 text-white transition-all bg-blue-500 rounded-md px-7 hover:bg-blue-600"
+						className="px-5 py-2 text-white transition-all bg-blue-500 rounded-md hover:bg-blue-600"
 					>
 						Add
 					</button>
 					<button
-						className="py-3 text-white transition-all bg-gray-500 rounded-md px-7 hover:bg-gray-600"
+						className="px-5 py-2 text-white transition-all bg-gray-500 rounded-md hover:bg-gray-600"
 						onClick={handleResetForm}
 					>
 						Reset

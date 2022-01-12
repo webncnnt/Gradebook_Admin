@@ -1,18 +1,22 @@
 import { CircularProgress } from '@mui/material';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import FullScreenBackdrop from '../../components/FullScreenBackdrop';
-import Login from '../../components/LoginForm/Login';
+import LoginForm from '../../components/LoginForm';
 import useAlert from '../../hooks/useAlert';
 import useAsync from '../../hooks/useAsync';
 import useAuth from '../../hooks/useAuth';
 import LoginFormData from '../../types/form/LoginFormData';
 
 const LoginPage = () => {
+	const location = useLocation();
 	const navigate = useNavigate();
 	const { currentUser, login } = useAuth();
 	const { addMessage } = useAlert();
 	const { execute, status, error, pendingTime } = useAsync((data: LoginFormData) => login(data));
+
+	// @ts-ignore
+	const from = location.state?.from?.pathname;
 
 	useEffect(() => {
 		if (status !== 'error') return;
@@ -25,7 +29,7 @@ const LoginPage = () => {
 		if (status !== 'success') return;
 		if (currentUser === null) return;
 
-		navigate('/', { replace: true });
+		navigate(from || '/', { replace: true });
 	}, [status, currentUser, navigate]);
 
 	const onSubmit = (data: LoginFormData) => {
@@ -34,9 +38,9 @@ const LoginPage = () => {
 
 	return (
 		<div className="flex items-center justify-center w-screen h-screen">
-			<div className="-mt-5">
+			<div className="px-6 -mt-5 bg-white rounded-md shadow-lg py-14">
 				<div className="mb-16 text-5xl font-black text-center font-logo ">Gradebook</div>
-				<Login error={status === 'error'} onSubmit={onSubmit} />
+				<LoginForm error={status === 'error'} onSubmit={onSubmit} />
 			</div>
 
 			{status === 'pending' && pendingTime >= 1 && (

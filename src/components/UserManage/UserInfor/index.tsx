@@ -1,4 +1,4 @@
-import { TextField } from '@mui/material';
+import { styled, TextField, TextFieldProps } from '@mui/material';
 import { useEffect, useState } from 'react';
 import useAlert from '../../../hooks/useAlert';
 import useAsync from '../../../hooks/useAsync';
@@ -9,14 +9,14 @@ type UserInforProps = {
 	userId: string;
 };
 
+const TextFieldWithShrink = ({ InputLabelProps, ...rest }: TextFieldProps) => {
+	return <TextField InputLabelProps={{ shrink: true }} {...rest} />;
+};
+
 const UserInfor = ({ userId }: UserInforProps) => {
 	const { addMessage } = useAlert();
-
 	const [user, setUser] = useState<UserModel | null>(null);
-
-	const { execute, status, value, error } = useAsync(async (userId: number) =>
-		userApi.getUser(userId)
-	);
+	const { execute, status, value, error } = useAsync(userApi.getUser);
 
 	useEffect(() => {
 		if (status !== 'error') return;
@@ -37,19 +37,16 @@ const UserInfor = ({ userId }: UserInforProps) => {
 		if (userId === null) return;
 		if (!parseInt(userId)) return;
 
-		execute(userId);
+		// execute(userId);
 		//eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [userId]);
 
 	return (
 		<div className="flex flex-col gap-3">
-			<TextField label="aaa" />
-			<TextField label="aaa" />
-			<TextField label="aaa" />
-			<TextField label="aaa" />
-			<TextField label="aaa" />
-			<TextField label="aaa" />
-			<TextField label="aaa" />
+			<TextFieldWithShrink label="Full Name" />
+			<TextFieldWithShrink label="Email" />
+			<TextField label="Password" />
+			<TextField label="Full Name" />
 		</div>
 	);
 };

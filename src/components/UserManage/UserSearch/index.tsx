@@ -1,34 +1,32 @@
 import { TextField } from '@mui/material';
-import { HTMLAttributes, useEffect, useMemo, useState } from 'react';
+import { HTMLAttributes, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useLocation, useSearchParams } from 'react-router-dom';
 import UserFilterValue from '../../../types/filter/UserFilterValue';
 import SearchUserFormData from '../../../types/form/SearchUserFormData';
 import Button from '../../Button';
-import queryString from 'query-string';
 
-type UserSearchProps = {} & HTMLAttributes<HTMLDivElement>;
+type UserSearchProps = {
+	filterValue: UserFilterValue;
+	onFilterChange: (filterValue: UserFilterValue) => void;
+} & HTMLAttributes<HTMLDivElement>;
 
-const UserSearch = ({ ...rest }: UserSearchProps) => {
-	const location = useLocation();
-	const [, setSearchParams] = useSearchParams();
+const UserSearch = ({ filterValue, onFilterChange, ...rest }: UserSearchProps) => {
+	const { register, handleSubmit, setValue } = useForm<SearchUserFormData>();
 
-	const initialParams = useMemo<UserFilterValue>(() => {
-		const { name, email } = queryString.parse(location.search);
-		const values: UserFilterValue = {};
+	const handleFormSubmit = (formData: SearchUserFormData) => {
+		const { email, fullName } = formData;
 
-		values.name = name && !Array.isArray(name) ? name : undefined;
-		values.email = email && !Array.isArray(email) ? email : undefined;
+		onFilterChange({
+			...filterValue,
+			email,
+			name: fullName
+		});
+	};
 
-		return values;
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-
-	const { register, handleSubmit } = useForm<SearchUserFormData>();
-	const [filterValue, setFilterValue] = useState<UserFilterValue>(initialParams);
-	const [hasSelectedRow, setHasSelectedRow] = useState<boolean>(false);
-
-	const handleFormSubmit = (formData: SearchUserFormData) => {};
+	useEffect(() => {
+		setValue('email', filterValue.email);
+		setValue('fullName', filterValue.name);
+	}, [filterValue]);
 
 	return (
 		<div {...rest}>
@@ -36,6 +34,7 @@ const UserSearch = ({ ...rest }: UserSearchProps) => {
 			<form onSubmit={handleSubmit(handleFormSubmit)}>
 				<div className="flex flex-row gap-2 mt-4">
 					<TextField
+						size="small"
 						{...register('fullName')}
 						autoFocus
 						className="w-1/2 lg:w-1/3"
@@ -43,6 +42,7 @@ const UserSearch = ({ ...rest }: UserSearchProps) => {
 						label="Name"
 					/>
 					<TextField
+						size="small"
 						{...register('email')}
 						className="w-1/2 xl:w-1/3"
 						InputLabelProps={{ shrink: true }}
@@ -50,7 +50,7 @@ const UserSearch = ({ ...rest }: UserSearchProps) => {
 					/>
 				</div>
 
-				<Button type="submit" className="px-4 py-2 mt-3">
+				<Button type="submit" className="px-5 py-2 mt-3">
 					Search
 				</Button>
 			</form>

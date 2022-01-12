@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { TextField } from '@mui/material';
-import { useEffect } from 'react';
+import { HTMLAttributes, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import LoginFormData from '../../types/form/LoginFormData';
@@ -9,7 +9,7 @@ import Button from '../Button';
 type LoginFormProps = {
 	error?: boolean;
 	onSubmit?: (data: LoginFormData) => void;
-};
+} & Omit<HTMLAttributes<HTMLFormElement>, 'onSubmit'>;
 
 const schema = Yup.object().shape({
 	email: Yup.string()
@@ -23,7 +23,7 @@ const schema = Yup.object().shape({
 		.min(6, 'Password must be at least 6 characters')
 });
 
-const LoginForm = ({ onSubmit, error = false }: LoginFormProps) => {
+const LoginForm = ({ onSubmit, error = false, ...rest }: LoginFormProps) => {
 	const {
 		register,
 		handleSubmit,
@@ -48,7 +48,7 @@ const LoginForm = ({ onSubmit, error = false }: LoginFormProps) => {
 	};
 
 	return (
-		<form id="login-form" onSubmit={handleSubmit(onFormSubmit)}>
+		<form id="login-form" {...rest} onSubmit={handleSubmit(onFormSubmit)}>
 			<div className="flex flex-col gap-4 w-96">
 				<TextField
 					autoFocus

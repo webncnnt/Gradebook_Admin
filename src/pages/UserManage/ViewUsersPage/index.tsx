@@ -1,44 +1,62 @@
 import UserDataGrid from '../../../components/UserManage/UserDataGrid';
 import AdminContentLayout from '../../../layouts/AdminContentLayout';
-import userApi from '../../../services/apis/userApi';
-import { useEffect, useState } from 'react';
-import useListFetch from '../../../hooks/useListFetch';
-import { UserModel } from '../../../types/models/userModel';
+import { useEffect, useMemo, useState } from 'react';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import UserSearch from '../../../components/UserManage/UserSearch';
-import useAlert from '../../../hooks/useAlert';
+import UserFilterValue from '../../../types/filter/UserFilterValue';
+import queryString from 'query-string';
+
+const INITIAL_FILTER_VALUE: UserFilterValue = {
+	page: 1,
+	limit: 5,
+	sortBy: 'id',
+	order: 'asc'
+};
 
 const ViewUsersPage = () => {
-	const { addMessage } = useAlert();
-	const [users, setUsers] = useState<UserModel[]>([]);
-	const { execute, listData, status, count, error } = useListFetch<UserModel>(
-		userApi.getUsers,
-		(data) => data.data.users
-	);
+	const location = useLocation();
 
-	useEffect(() => {
-		execute();
-	}, [execute]);
+	const initialParams = useMemo<UserFilterValue>(() => {
+		const { page, limit, name, email, sortBy, order } = queryString.parse(location.search);
+		const values: UserFilterValue = {};
 
-	useEffect(() => {
-		if (status === 'success') {
-			setUsers(listData);
-		}
-	}, [status, listData]);
+		if (page && +page) values.page = +page;
+		if (limit && +limit) values.limit = +limit;
+		if (order === 'asc' || order === 'desc') values.order = order;
+		if (sortBy && !Array.isArray(sortBy)) values.sortBy = sortBy;
+		if (name && !Array.isArray(name)) values.name = name;
+		if (email && !Array.isArray(email)) values.email = email;
 
-	useEffect(() => {
-		if (status === 'error') {
-			addMessage(error.data.message, 'error');
-		}
+		return { ...INITIAL_FILTER_VALUE, ...values };
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [status, error]);
+	}, []);
+
+	const [, setSearchParams] = useSearchParams();
+	const [filterValue, setFilterValue] = useState<UserFilterValue>(initialParams);
+
+	useEffect(() => {
+		setSearchParams(queryString.stringify(filterValue, { skipEmptyString: true }));
+	}, [filterValue, setSearchParams]);
+
+	const handleSearchFilterChange = (filter: UserFilterValue) => {
+		setFilterValue((v) => ({ ...v, ...filter }));
+	};
+
+	const handleDataGridFilterChange = (filter: UserFilterValue) => {
+		setFilterValue((v) => ({ ...v, ...filter }));
+	};
 
 	return (
 		<AdminContentLayout header="View Users">
-			<UserSearch className="px-5 pt-3 pb-5 bg-white rounded-md shadow-sm" />
+			<UserSearch
+				filterValue={filterValue}
+				onFilterChange={handleSearchFilterChange}
+				className="px-5 pt-3 pb-5 bg-white rounded-md shadow-sm"
+			/>
 			<UserDataGrid
+				filterValue={filterValue}
+				onFilterChange={handleDataGridFilterChange}
 				className="px-5 py-3 mt-3 bg-white rounded-md shadow-md"
-				rows={users}
-				rowCount={count}
 			/>
 		</AdminContentLayout>
 	);
