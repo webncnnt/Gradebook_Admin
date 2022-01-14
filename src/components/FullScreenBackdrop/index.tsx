@@ -5,11 +5,7 @@ type FullScreenBackdropProps = {
 	children: React.ReactNode;
 } & HTMLAttributes<HTMLDivElement>;
 
-const FullScreenBackdrop = ({
-	children,
-	className,
-	...rest
-}: FullScreenBackdropProps) => {
+const FullScreenBackdrop = ({ children, className, ...rest }: FullScreenBackdropProps) => {
 	const classes = classNames('fixed z-50 w-screen h-screen', className);
 
 	return (

@@ -10,10 +10,6 @@ type SidebarProps = {
 const Sidebar = ({ items, className, ...rest }: SidebarProps) => {
 	const location = useLocation();
 
-	const handleClick = (item: SidebarItem) => {
-		console.log(item);
-	};
-
 	const checkMenuItemActive = (item: SidebarItem): boolean => {
 		if (!item.path) {
 			return false;
@@ -41,7 +37,6 @@ const Sidebar = ({ items, className, ...rest }: SidebarProps) => {
 				item={item}
 				key={item.path || item.name}
 				active={isActive}
-				onMenuClick={handleClick}
 			>
 				{item.items && item.items.map((item) => createSideBarMenuItem(item))}
 			</SideBarMenuItem>

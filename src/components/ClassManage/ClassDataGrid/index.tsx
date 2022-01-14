@@ -3,7 +3,6 @@ import {
 	GridColDef,
 	GridEventListener,
 	GridEvents,
-	GridSelectionModel,
 	GridSortModel
 } from '@mui/x-data-grid';
 import { HTMLAttributes, useEffect, useState } from 'react';
@@ -79,12 +78,10 @@ const ClassDataGrid = ({ filterValue, onFilterChange, ...rest }: ClassDataGridPr
 	useEffect(() => {
 		if (sortModel.length > 0) {
 			const { field, sort } = sortModel[0];
-			field && sort && onFilterChange({ ...filterValue });
+			field && sort && onFilterChange({ ...filterValue, sortBy: field, order: sort });
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sortModel]);
-
-	const handleSelectionChange = (selectionModel: GridSelectionModel) => {};
 
 	const handlePageSizeChange = (pageSize: number) => {
 		onFilterChange({ ...filterValue, limit: pageSize });
@@ -111,7 +108,6 @@ const ClassDataGrid = ({ filterValue, onFilterChange, ...rest }: ClassDataGridPr
 					sortModel={sortModel}
 					columns={columns}
 					pageSize={filterValue.limit}
-					onSelectionModelChange={handleSelectionChange}
 					autoHeight
 					onRowClick={handleRowClick}
 					rowsPerPageOptions={[5, 10, 15, 20]}

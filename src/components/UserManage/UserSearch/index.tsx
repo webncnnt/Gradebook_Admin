@@ -26,6 +26,7 @@ const UserSearch = ({ filterValue, onFilterChange, ...rest }: UserSearchProps) =
 	useEffect(() => {
 		setValue('email', filterValue.email);
 		setValue('fullName', filterValue.name);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [filterValue]);
 
 	return (

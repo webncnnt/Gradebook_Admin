@@ -6,9 +6,7 @@ import { AlertMessage } from '../../types/AlertMessage';
 const AlertNotification = () => {
 	const { messages, removeMessage } = useAlert();
 	const [open, setOpen] = useState(false);
-	const [currentMessage, setCurrentMessage] = useState<AlertMessage | null>(
-		null
-	);
+	const [currentMessage, setCurrentMessage] = useState<AlertMessage | null>(null);
 
 	useEffect(() => {
 		if (messages.length > 0) {
@@ -23,17 +21,8 @@ const AlertNotification = () => {
 	};
 
 	return currentMessage ? (
-		<Snackbar
-			open={open}
-			className="shadow-2xl"
-			autoHideDuration={3000}
-			onClose={handleClose}
-		>
-			<Alert
-				onClose={handleClose}
-				severity={currentMessage!.type}
-				sx={{ width: '100%' }}
-			>
+		<Snackbar open={open} className="shadow-2xl" autoHideDuration={3000} onClose={handleClose}>
+			<Alert onClose={handleClose} severity={currentMessage!.type} sx={{ width: '100%' }}>
 				{currentMessage!.message}
 			</Alert>
 		</Snackbar>

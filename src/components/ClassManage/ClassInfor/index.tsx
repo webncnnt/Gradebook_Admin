@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import useAlert from '../../../hooks/useAlert';
 import useAsync from '../../../hooks/useAsync';
 import classApi from '../../../services/apis/classApi';
-import userApi from '../../../services/apis/userApi';
 import ClassModel from '../../../types/models/ClassModel';
 import Button from '../../Button';
 import TextFieldWithShrink from '../../TextFieldWithShrink';
@@ -35,7 +34,6 @@ const ClassInfor = ({ classId }: ClassInforProps) => {
 		if (status !== 'success') return;
 		if (value === null) return;
 
-		console.log(value.data.data);
 		setClass(value.data.data as ClassModel);
 	}, [status, value]);
 

@@ -30,7 +30,7 @@ const LoginPage = () => {
 		if (currentUser === null) return;
 
 		navigate(from || '/', { replace: true });
-	}, [status, currentUser, navigate]);
+	}, [status, currentUser, navigate, from]);
 
 	const onSubmit = (data: LoginFormData) => {
 		execute(data);

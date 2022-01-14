@@ -15,7 +15,7 @@ const ViewClassesPage = () => {
 	const location = useLocation();
 
 	const initialParams = useMemo<ClassFilterValue>(() => {
-		const { page, limit, name, email, sortBy, order } = queryString.parse(location.search);
+		const { page, limit, name, sortBy, order } = queryString.parse(location.search);
 		const values: ClassFilterValue = {};
 
 		if (page && +page) values.page = +page;

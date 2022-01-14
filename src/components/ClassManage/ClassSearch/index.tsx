@@ -1,5 +1,5 @@
 import { TextField } from '@mui/material';
-import { HTMLAttributes, useEffect, useState } from 'react';
+import { HTMLAttributes, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import ClassFilterValue from '../../../types/filter/ClassFilterValue';
 import SearchClassFormData from '../../../types/form/SearchClassFormData';
@@ -15,6 +15,7 @@ const ClassSearch = ({ filterValue, onFilterChange, ...rest }: ClassSearchProps)
 
 	useEffect(() => {
 		setValue('className', filterValue.name);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [filterValue]);
 
 	const handleFormSubmit = (formData: SearchClassFormData) => {
