@@ -2,6 +2,8 @@ import {
 	DataGrid,
 	GridCellEditCommitParams,
 	GridColDef,
+	GridEventListener,
+	GridEvents,
 	GridSelectionModel,
 	GridSortModel
 } from '@mui/x-data-grid';
@@ -13,6 +15,8 @@ import UserFilterValue from '../../../types/filter/UserFilterValue';
 import { UserModel } from '../../../types/models/userModel';
 import useListFetch from '../../../hooks/useListFetch';
 import userApi from '../../../services/apis/userApi';
+import { useNavigate } from 'react-router-dom';
+import ROUTES from '../../../constants/route';
 
 const columns: GridColDef[] = [
 	{ field: 'id', headerName: 'ID', width: 70 },
@@ -54,6 +58,7 @@ type UserDataGridProps = {
 
 const UserDataGrid = ({ filterValue, onFilterChange, ...rest }: UserDataGridProps) => {
 	const { addMessage } = useAlert();
+	const navigate = useNavigate();
 	const [users, setUsers] = useState<UserModel[]>([]);
 
 	const { execute, listData, status, count, error } = useListFetch<UserModel>(
@@ -105,6 +110,10 @@ const UserDataGrid = ({ filterValue, onFilterChange, ...rest }: UserDataGridProp
 
 	const handleStudentIdCommit = (commitParams: GridCellEditCommitParams) => {};
 
+	const handleRowClick: GridEventListener<GridEvents.rowClick> = ({ row }) => {
+		navigate(`${ROUTES.USER}/${row.id}`);
+	};
+
 	return (
 		<div {...rest}>
 			<Button
@@ -124,6 +133,7 @@ const UserDataGrid = ({ filterValue, onFilterChange, ...rest }: UserDataGridProp
 					pageSize={filterValue.limit}
 					onSelectionModelChange={handleSelectionChange}
 					autoHeight
+					onRowClick={handleRowClick}
 					sortingMode="server"
 					rowsPerPageOptions={[5, 10, 15, 20]}
 					onPageSizeChange={handlePageSizeChange}

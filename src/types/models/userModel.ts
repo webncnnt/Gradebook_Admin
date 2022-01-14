@@ -6,4 +6,7 @@ export type UserModel = {
 	dob?: Date;
 	numberPhone?: string;
 	status: boolean; // true: block
+	createdAt: Date;
+	facebook?: string;
+	role: number;
 };

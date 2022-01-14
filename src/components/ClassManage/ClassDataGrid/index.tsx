@@ -1,7 +1,8 @@
 import {
 	DataGrid,
-	GridCellEditCommitParams,
 	GridColDef,
+	GridEventListener,
+	GridEvents,
 	GridSelectionModel,
 	GridSortModel
 } from '@mui/x-data-grid';
@@ -12,6 +13,8 @@ import ClassFilterValue from '../../../types/filter/ClassFilterValue';
 import useListFetch from '../../../hooks/useListFetch';
 import classApi from '../../../services/apis/classApi';
 import ClassModel from '../../../types/models/ClassModel';
+import { useNavigate } from 'react-router-dom';
+import ROUTES from '../../../constants/route';
 
 const columns: GridColDef[] = [
 	{ field: 'id', headerName: 'ID', width: 70 },
@@ -50,6 +53,7 @@ type ClassDataGridProps = {
 
 const ClassDataGrid = ({ filterValue, onFilterChange, ...rest }: ClassDataGridProps) => {
 	const { addMessage } = useAlert();
+	const navigate = useNavigate();
 	const [classes, setClasses] = useState<ClassModel[]>([]);
 
 	const { execute, listData, status, count, error } = useListFetch<ClassModel>(
@@ -94,9 +98,9 @@ const ClassDataGrid = ({ filterValue, onFilterChange, ...rest }: ClassDataGridPr
 		setSortModel(gridSortModel);
 	};
 
-	const handleBlockUserClick = () => {};
-
-	const handleStudentIdCommit = (commitParams: GridCellEditCommitParams) => {};
+	const handleRowClick: GridEventListener<GridEvents.rowClick> = ({ row }) => {
+		navigate(`${ROUTES.CLASS}/${row.id}`);
+	};
 
 	return (
 		<div {...rest}>
@@ -109,6 +113,7 @@ const ClassDataGrid = ({ filterValue, onFilterChange, ...rest }: ClassDataGridPr
 					pageSize={filterValue.limit}
 					onSelectionModelChange={handleSelectionChange}
 					autoHeight
+					onRowClick={handleRowClick}
 					rowsPerPageOptions={[5, 10, 15, 20]}
 					onPageSizeChange={handlePageSizeChange}
 					checkboxSelection
@@ -119,7 +124,6 @@ const ClassDataGrid = ({ filterValue, onFilterChange, ...rest }: ClassDataGridPr
 					rowCount={count}
 					onPageChange={handlePageChange}
 					disableSelectionOnClick
-					onCellEditCommit={handleStudentIdCommit}
 				/>
 			</div>
 		</div>

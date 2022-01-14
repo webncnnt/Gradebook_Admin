@@ -24,6 +24,7 @@ const AdminRoutes = () => {
 						<Route index element={<Navigate to={ROUTES.ADMIN_VIEW_LIST} />} />
 						<Route path={ROUTES.ADMIN_VIEW_LIST} element={<ViewAdminsPage />} />
 						<Route path={ROUTES.ADMIN_ADD} element={<AddAdminPage />} />
+						<Route path={ROUTES.ADMIN_DETAIL} element={<UserInforPage />} />
 					</Route>
 
 					<Route path={ROUTES.USER}>

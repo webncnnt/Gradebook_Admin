@@ -3,7 +3,7 @@ type ClassModel = {
 	className: string;
 	ownerId: number;
 	inviteCode: string;
-	coverImage?: string | null;
+	coverImage?: string;
 	description?: string;
 	status: 'active' | 'blocked';
 	expiredTime?: Date;
