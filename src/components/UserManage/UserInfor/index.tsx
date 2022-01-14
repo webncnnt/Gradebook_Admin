@@ -48,7 +48,7 @@ const UserInfor = ({ userId }: UserInforProps) => {
 			{user && (
 				<div aria-label="user-information">
 					<img
-						src={user?.avatar}
+						src={user?.avatar || '/DefaultUserAvatar.jpg'}
 						alt="avatar"
 						className="object-cover w-32 h-32 bg-black rounded-full lg:h-40 lg:w-40"
 					/>

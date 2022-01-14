@@ -16,6 +16,7 @@ const items: SidebarItem[] = [
 	{
 		name: 'Class',
 		icon: faGraduationCap,
+		activePaths: [ROUTES.CLASS_DETAIL],
 		items: [
 			{
 				path: ROUTES.CLASS_VIEW_LIST,

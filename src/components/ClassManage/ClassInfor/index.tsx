@@ -46,7 +46,7 @@ const ClassInfor = ({ classId }: ClassInforProps) => {
 			{clazz && (
 				<div aria-label="class-information">
 					<img
-						src={clazz.coverImage}
+						src={clazz.coverImage || '/DefaultClassAvatar.jpg'}
 						alt="avatar"
 						className="object-cover w-32 h-32 bg-black rounded-full lg:h-40 lg:w-40"
 					/>

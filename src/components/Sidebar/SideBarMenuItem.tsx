@@ -1,8 +1,8 @@
 import { faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useMemo, useState } from 'react';
+import { matchPath, NavLink, useLocation } from 'react-router-dom';
 import SidebarItem from './type';
 
 type SideBarMenuItemProps = {
@@ -20,7 +20,18 @@ const SideBarMenuItem = ({
 	children,
 	...rest
 }: SideBarMenuItemProps) => {
-	const [collapsed, setCollapsed] = useState(true);
+	const location = useLocation();
+
+	const initialCollapse = useMemo(() => {
+		if (!item.items) return true;
+		if (item.items.some((p) => matchPath(p.path!, location.pathname))) {
+			return false;
+		}
+		return true;
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	const [collapsed, setCollapsed] = useState(initialCollapse);
 
 	const classes = classNames(
 		'w-full text-left',
