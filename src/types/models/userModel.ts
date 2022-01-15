@@ -9,4 +9,6 @@ export type UserModel = {
 	createdAt: Date;
 	facebook?: string;
 	role: number;
+	studentId?: string;
+	address?: string;
 };

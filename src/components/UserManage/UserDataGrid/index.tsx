@@ -2,8 +2,6 @@ import {
 	DataGrid,
 	GridCellEditCommitParams,
 	GridColDef,
-	GridEventListener,
-	GridEvents,
 	GridSelectionModel,
 	GridSortModel
 } from '@mui/x-data-grid';
@@ -15,11 +13,27 @@ import UserFilterValue from '../../../types/filter/UserFilterValue';
 import { UserModel } from '../../../types/models/userModel';
 import useListFetch from '../../../hooks/useListFetch';
 import userApi from '../../../services/apis/userApi';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ROUTES from '../../../constants/route';
+import useAsync from '../../../hooks/useAsync';
+import UpdateStudentFormData from '../../../types/form/UpdateStudentFormData';
 
 const columns: GridColDef[] = [
-	{ field: 'id', headerName: 'ID', width: 70 },
+	{
+		field: 'id',
+		headerName: 'ID',
+		width: 70,
+		renderCell: ({ value }) => {
+			return (
+				<Link
+					className="text-blue-600 underline active:text-violet-600"
+					to={`${ROUTES.USER}/${value}`}
+				>
+					{value}
+				</Link>
+			);
+		}
+	},
 	{
 		field: 'fullName',
 		headerName: 'Full Name',
@@ -44,7 +58,7 @@ const columns: GridColDef[] = [
 		valueFormatter: (params) => moment(params.value as Date).format('DD/MM/YYYY HH:mm:ss')
 	},
 	{
-		field: 'Status',
+		field: 'status',
 		headerName: 'Status',
 		width: 100,
 		valueFormatter: (params) => (params.value === 'blocked' ? 'Blocked' : 'Active')
@@ -58,29 +72,60 @@ type UserDataGridProps = {
 
 const UserDataGrid = ({ filterValue, onFilterChange, ...rest }: UserDataGridProps) => {
 	const { addMessage } = useAlert();
-	const navigate = useNavigate();
+
 	const [users, setUsers] = useState<UserModel[]>([]);
 
-	const { execute, listData, status, count, error } = useListFetch<UserModel>(
+	const {
+		execute: executeUsersFetch,
+		listData: listDataUsers,
+		status: statusUsersFetch,
+		count: totalUsers,
+		error: errorUsersFetch
+	} = useListFetch<UserModel>(
 		async () => userApi.getUsers(filterValue),
 		(data) => data.data.users
 	);
 
+	const {
+		execute: executeUpdateStudentId,
+		status: statusUpdateStudentId,
+		error: errorsUpdateStudentId
+	} = useAsync(userApi.putUser);
+
+	const {
+		execute: executeBlockUsers,
+		status: statusBlockFetch,
+		error: errorBlockFetch
+	} = useAsync(userApi.blockUsers);
+
 	const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
 	const [sortModel, setSortModel] = useState<GridSortModel>([]);
 
+	// Users
 	useEffect(() => {
-		execute();
+		executeUsersFetch();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [filterValue]);
 
 	useEffect(() => {
-		status === 'success' && setUsers(listData);
-	}, [status, listData]);
+		statusUsersFetch === 'success' && setUsers(listDataUsers);
+	}, [statusUsersFetch, listDataUsers]);
 
 	useEffect(() => {
-		status === 'error' && addMessage(error.data.message, 'error');
-	}, [status, error, addMessage]);
+		statusUsersFetch === 'error' && addMessage(errorUsersFetch.data.message, 'error');
+	}, [statusUsersFetch, errorUsersFetch, addMessage]);
+
+	// Block Users
+	useEffect(() => {
+		statusBlockFetch === 'success' && addMessage('Block users successfully', 'success');
+		statusBlockFetch === 'error' && addMessage(errorBlockFetch.data.message, 'error');
+	}, [statusBlockFetch]);
+
+	// Update Student ID
+	useEffect(() => {
+		statusUpdateStudentId === 'success' && addMessage('Update student id success', 'success');
+		statusUpdateStudentId === 'error' && addMessage(errorsUpdateStudentId.data.message, 'error');
+	}, [statusUpdateStudentId]);
 
 	useEffect(() => {
 		if (sortModel.length > 0) {
@@ -106,12 +151,31 @@ const UserDataGrid = ({ filterValue, onFilterChange, ...rest }: UserDataGridProp
 		setSortModel(gridSortModel);
 	};
 
-	const handleBlockUserClick = () => {};
+	const handleBlockUserClick = () => {
+		executeBlockUsers(selectionModel);
+	};
 
-	const handleStudentIdCommit = (commitParams: GridCellEditCommitParams) => {};
+	const handleStudentIdCommit = (commitParams: GridCellEditCommitParams) => {
+		const { id, value } = commitParams;
 
-	const handleRowClick: GridEventListener<GridEvents.rowClick> = ({ row }) => {
-		navigate(`${ROUTES.USER}/${row.id}`);
+		const userNeedUpdate = users.find((u) => u.id === id);
+
+		if (userNeedUpdate) {
+			const { fullName, id, avatar, dob, numberPhone, facebook, address } = userNeedUpdate;
+
+			const updateForm: UpdateStudentFormData = {
+				fullname: fullName,
+				id,
+				studentId: value?.toString(),
+				avatar,
+				dob,
+				numberPhone,
+				facebook,
+				address
+			};
+
+			executeUpdateStudentId(updateForm);
+		}
 	};
 
 	return (
@@ -133,7 +197,6 @@ const UserDataGrid = ({ filterValue, onFilterChange, ...rest }: UserDataGridProp
 					pageSize={filterValue.limit}
 					onSelectionModelChange={handleSelectionChange}
 					autoHeight
-					onRowClick={handleRowClick}
 					sortingMode="server"
 					rowsPerPageOptions={[5, 10, 15, 20]}
 					onPageSizeChange={handlePageSizeChange}
@@ -141,7 +204,7 @@ const UserDataGrid = ({ filterValue, onFilterChange, ...rest }: UserDataGridProp
 					onSortModelChange={handleSortModelChange}
 					page={filterValue.page !== undefined ? filterValue.page - 1 : filterValue.page}
 					paginationMode="server"
-					rowCount={count}
+					rowCount={totalUsers}
 					onPageChange={handlePageChange}
 					disableSelectionOnClick
 					onCellEditCommit={handleStudentIdCommit}
