@@ -119,13 +119,13 @@ const UserDataGrid = ({ filterValue, onFilterChange, ...rest }: UserDataGridProp
 	useEffect(() => {
 		statusBlockFetch === 'success' && addMessage('Block users successfully', 'success');
 		statusBlockFetch === 'error' && addMessage(errorBlockFetch.data.message, 'error');
-	}, [statusBlockFetch]);
+	}, [statusBlockFetch, addMessage]);
 
 	// Update Student ID
 	useEffect(() => {
 		statusUpdateStudentId === 'success' && addMessage('Update student id success', 'success');
 		statusUpdateStudentId === 'error' && addMessage(errorsUpdateStudentId.data.message, 'error');
-	}, [statusUpdateStudentId]);
+	}, [statusUpdateStudentId, addMessage]);
 
 	useEffect(() => {
 		if (sortModel.length > 0) {
