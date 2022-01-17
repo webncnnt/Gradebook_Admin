@@ -56,7 +56,6 @@ const LoginForm = ({ onSubmit, error = false, ...rest }: LoginFormProps) => {
 					autoComplete="email"
 					id="email_textbox"
 					title="Email"
-					defaultValue="ndmt1at21@gmail.com"
 					label="Email"
 					helperText={errors.email?.message}
 					error={errors.email !== undefined}
@@ -68,7 +67,6 @@ const LoginForm = ({ onSubmit, error = false, ...rest }: LoginFormProps) => {
 					type="password"
 					id="password_textbox"
 					title="Password"
-					defaultValue="12345678"
 					label="Password"
 					error={errors.password !== undefined}
 					helperText={errors.password?.message}
