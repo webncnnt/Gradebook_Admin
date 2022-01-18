@@ -60,6 +60,9 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
 	const login = useCallback(async (formData: LoginFormData) => {
 		const res = await authApi.postLogin(formData.email, formData.password);
+
+		if (res.data.user.role === 0) return;
+
 		localStorage.setItem('access_token', res.data.accessToken);
 		setCurrentUser(res.data.user as UserModel);
 	}, []);

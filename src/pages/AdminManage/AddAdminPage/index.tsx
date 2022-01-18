@@ -30,7 +30,7 @@ const AddAdminPage = () => {
 		addMessage('Admin created successfully', 'success');
 
 		const timer = setTimeout(() => {
-			navigate('/admin/viewAdmins');
+			navigate('/admins/viewAdmins');
 		}, 2000);
 
 		return () => clearTimeout(timer);

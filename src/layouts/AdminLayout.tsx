@@ -11,6 +11,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import SidebarItem from '../components/Sidebar/type';
 import ROUTES from '../constants/route';
+import useAuth from '../hooks/useAuth';
 
 const items: SidebarItem[] = [
 	{
@@ -65,14 +66,29 @@ const FallbackSkeleton = () => {
 };
 
 const AdminLayout = () => {
+	const { logout } = useAuth();
+
+	const handleLogout = () => {
+		logout();
+	};
+
 	return (
 		<div className="relative flex">
-			<div className="w-64 h-screen p-2 overflow-auto bg-white shadow-xl rounded-xl">
-				<NavLink to="/">
-					<h1 className="mx-5 my-3 text-xl font-black font-logo">Gradebook</h1>
-				</NavLink>
+			<div className="flex flex-col justify-between w-64 h-screen p-2 overflow-auto bg-white shadow-xl w rounded-xl">
+				<div className="h-full ">
+					<NavLink to="/">
+						<h1 className="mx-5 my-3 text-xl font-black font-logo">Gradebook</h1>
+					</NavLink>
 
-				<Sidebar items={items} className="mt-10 text-base" />
+					<Sidebar items={items} className="mt-10 text-base" />
+				</div>
+
+				<div
+					className="mb-2 font-bold text-center text-gray-500 cursor-pointer"
+					onClick={handleLogout}
+				>
+					Logout
+				</div>
 			</div>
 
 			<div className="flex-1 h-screen px-5 py-3 overflow-auto">
