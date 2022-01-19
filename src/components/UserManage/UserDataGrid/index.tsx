@@ -94,6 +94,7 @@ const UserDataGrid = ({ filterValue, onFilterChange, ...rest }: UserDataGridProp
 
 	const {
 		execute: executeBlockUsers,
+		value: valueBlockUsers,
 		status: statusBlockFetch,
 		error: errorBlockFetch
 	} = useAsync(userApi.blockUsers);
@@ -115,9 +116,34 @@ const UserDataGrid = ({ filterValue, onFilterChange, ...rest }: UserDataGridProp
 		statusUsersFetch === 'error' && addMessage(errorUsersFetch.data.message, 'error');
 	}, [statusUsersFetch, errorUsersFetch, addMessage]);
 
-	// Block Users
+	// Block users Success
 	useEffect(() => {
-		statusBlockFetch === 'success' && addMessage('Block users successfully', 'success');
+		if (statusBlockFetch !== 'success') return;
+		if (valueBlockUsers === null) return;
+
+		const userHasBlocked = (idNeedFind: number) => {
+			return valueBlockUsers.data.users.find(
+				(updatedUser: UserModel) => updatedUser.id === idNeedFind
+			);
+		};
+
+		if (statusBlockFetch === 'success') {
+			const updatedUsers = users.map((u) => {
+				const blockedUser = userHasBlocked(u.id);
+
+				if (blockedUser) return { ...u, status: blockedUser.status };
+
+				return u;
+			});
+
+			setUsers(updatedUsers);
+			addMessage('Block users successfully', 'success');
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [statusBlockFetch, addMessage, valueBlockUsers]);
+
+	// Block users failed
+	useEffect(() => {
 		statusBlockFetch === 'error' && addMessage(errorBlockFetch.data.message, 'error');
 	}, [statusBlockFetch, addMessage, errorBlockFetch]);
 
@@ -127,6 +153,7 @@ const UserDataGrid = ({ filterValue, onFilterChange, ...rest }: UserDataGridProp
 		statusUpdateStudentId === 'error' && addMessage(errorsUpdateStudentId.data.message, 'error');
 	}, [statusUpdateStudentId, addMessage, errorsUpdateStudentId]);
 
+	// Update filter when sort model change
 	useEffect(() => {
 		if (sortModel.length > 0) {
 			const { field, sort } = sortModel[0];
@@ -188,6 +215,7 @@ const UserDataGrid = ({ filterValue, onFilterChange, ...rest }: UserDataGridProp
 			>
 				Block
 			</Button>
+
 			<div className="mt-3">
 				<DataGrid
 					rows={users}

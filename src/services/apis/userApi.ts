@@ -16,7 +16,7 @@ const userApi = {
 		return await axiosClient.put(`/profile/${user.id}`, user);
 	},
 	blockUsers: async (ids: number[]) => {
-		return await axiosClient.patch(`/admin/users/block`);
+		return await axiosClient.patch(`/admin/users/block`, { ids });
 	}
 };
 
