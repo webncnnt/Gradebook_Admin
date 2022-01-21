@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import useAlert from '../hooks/useAlert';
 import useAsync from '../hooks/useAsync';
 import authApi from '../services/apis/authApi';
 import userApi from '../services/apis/userApi';
@@ -19,6 +20,7 @@ type AuthProviderProps = {
 const AuthContext = React.createContext<AuthContextType | null>(null);
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
+	const { addMessage } = useAlert();
 	const [currentUser, setCurrentUser] = useState<UserModel | null>(null);
 	const [revalidating, setRevalidating] = useState(true);
 	const { execute, status, value, error } = useAsync(userApi.getMe);
@@ -61,7 +63,10 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 	const login = useCallback(async (formData: LoginFormData) => {
 		const res = await authApi.postLogin(formData.email, formData.password);
 
-		if (res.data.user.role === 0) return;
+		if (res.data.user.role !== 1) {
+			addMessage('You are not allowed to login', 'error');
+			return;
+		}
 
 		localStorage.setItem('access_token', res.data.accessToken);
 		setCurrentUser(res.data.user as UserModel);

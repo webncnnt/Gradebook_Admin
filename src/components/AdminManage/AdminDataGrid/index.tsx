@@ -12,12 +12,26 @@ import useAlert from '../../../hooks/useAlert';
 import AdminFilterValue from '../../../types/filter/AdminFilterValue';
 import { UserModel } from '../../../types/models/userModel';
 import useListFetch from '../../../hooks/useListFetch';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ROUTES from '../../../constants/route';
 import adminApi from '../../../services/apis/adminApi';
 
 const columns: GridColDef[] = [
-	{ field: 'id', headerName: 'ID', width: 70 },
+	{
+		field: 'id',
+		headerName: 'ID',
+		width: 70,
+		renderCell: ({ value }) => {
+			return (
+				<Link
+					className="text-blue-600 underline active:text-violet-600"
+					to={`${ROUTES.ADMIN}/${value}`}
+				>
+					{value}
+				</Link>
+			);
+		}
+	},
 	{
 		field: 'fullName',
 		headerName: 'Full Name',
@@ -98,10 +112,6 @@ const AdminDataGrid = ({ filterValue, onFilterChange, ...rest }: AdminDataGridPr
 		setSortModel(gridSortModel);
 	};
 
-	const handleRowClick: GridEventListener<GridEvents.rowClick> = ({ row }) => {
-		navigate(`${ROUTES.ADMIN}/${row.id}`);
-	};
-
 	return (
 		<div {...rest}>
 			<div className="mt-3">
@@ -113,7 +123,6 @@ const AdminDataGrid = ({ filterValue, onFilterChange, ...rest }: AdminDataGridPr
 					pageSize={filterValue.limit}
 					onSelectionModelChange={handleSelectionChange}
 					autoHeight
-					onRowClick={handleRowClick}
 					sortingMode="server"
 					rowsPerPageOptions={[5, 10, 15, 20]}
 					onPageSizeChange={handlePageSizeChange}

@@ -3,8 +3,10 @@ import {
 	faGraduationCap,
 	faList,
 	faScrewdriverWrench,
+	faSignOut,
 	faUsers
 } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Skeleton } from '@mui/material';
 import { Suspense } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
@@ -84,10 +86,13 @@ const AdminLayout = () => {
 				</div>
 
 				<div
-					className="mb-2 font-bold text-center text-gray-500 cursor-pointer"
+					className="mx-auto mb-2 font-bold text-gray-500 transition-all cursor-pointer hover:text-blue-500"
 					onClick={handleLogout}
 				>
-					Logout
+					<div className="flex items-center">
+						<FontAwesomeIcon icon={faSignOut} size="lg" />
+						<span className="ml-2">Logout</span>
+					</div>
 				</div>
 			</div>
 

@@ -7,12 +7,12 @@ import AppRoutes from './routes';
 function App() {
 	return (
 		<div className="min-h-screen bg-gray-100">
-			<AuthProvider>
-				<AlertProvider>
+			<AlertProvider>
+				<AuthProvider>
 					<AppRoutes />
 					<AlertNotification />
-				</AlertProvider>
-			</AuthProvider>
+				</AuthProvider>
+			</AlertProvider>
 		</div>
 	);
 }
