@@ -2,7 +2,7 @@ type RegisterAdminFormData = {
 	email: string;
 	password: string;
 	passwordConfirmation: string;
-	fullname: string;
+	fullName: string;
 };
 
 export default RegisterAdminFormData;

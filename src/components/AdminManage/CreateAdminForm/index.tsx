@@ -10,7 +10,7 @@ type CreateAdminFormProps = {
 } & Omit<HTMLAttributes<HTMLDivElement>, 'onSubmit'>;
 
 const schema = Yup.object().shape({
-	fullname: Yup.string()
+	fullName: Yup.string()
 		.required('Full name is required')
 		.min(5, 'Full name must be at least 5 characters long'),
 	email: Yup.string()
@@ -26,7 +26,7 @@ const schema = Yup.object().shape({
 });
 
 const INITIAL_ADMIN_FORM_DATA = {
-	fullname: '',
+	fullName: '',
 	email: '',
 	password: '',
 	passwordConfirmation: ''
@@ -55,8 +55,8 @@ const CreateAdminForm = ({ onSubmit, ...rest }: CreateAdminFormProps) => {
 
 	const handleResetForm = () => {
 		reset(INITIAL_ADMIN_FORM_DATA);
-		clearErrors(['email', 'fullname', 'password', 'passwordConfirmation']);
-		setFocus('fullname');
+		clearErrors(['email', 'fullName', 'password', 'passwordConfirmation']);
+		setFocus('fullName');
 	};
 
 	return (
@@ -67,11 +67,11 @@ const CreateAdminForm = ({ onSubmit, ...rest }: CreateAdminFormProps) => {
 			>
 				<TextField
 					size="small"
-					{...register('fullname')}
+					{...register('fullName')}
 					autoFocus
 					label="Full Name (*)"
-					helperText={errors.fullname?.message}
-					error={errors.fullname !== undefined}
+					helperText={errors.fullName?.message}
+					error={errors.fullName !== undefined}
 					InputLabelProps={{
 						shrink: true
 					}}

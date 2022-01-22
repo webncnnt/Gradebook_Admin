@@ -2,6 +2,7 @@ import {
 	DataGrid,
 	GridCellEditCommitParams,
 	GridColDef,
+	GridRowParams,
 	GridSelectionModel,
 	GridSortModel
 } from '@mui/x-data-grid';
@@ -127,18 +128,18 @@ const UserDataGrid = ({ filterValue, onFilterChange, ...rest }: UserDataGridProp
 			);
 		};
 
-		if (statusBlockFetch === 'success') {
-			const updatedUsers = users.map((u) => {
-				const blockedUser = userHasBlocked(u.id);
+		const updatedUsers = users.map((u) => {
+			const blockedUser = userHasBlocked(u.id);
 
-				if (blockedUser) return { ...u, status: blockedUser.status };
+			if (blockedUser) return { ...u, status: blockedUser.status };
 
-				return u;
-			});
+			return u;
+		});
 
-			setUsers(updatedUsers);
-			addMessage('Block users successfully', 'success');
-		}
+		setUsers(updatedUsers);
+		setSelectionModel([]);
+		addMessage('Block users successfully', 'success');
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [statusBlockFetch, addMessage, valueBlockUsers]);
 
@@ -149,7 +150,11 @@ const UserDataGrid = ({ filterValue, onFilterChange, ...rest }: UserDataGridProp
 
 	// Update Student ID
 	useEffect(() => {
-		statusUpdateStudentId === 'success' && addMessage('Update student id success', 'success');
+		if (statusUpdateStudentId !== 'success') return;
+		addMessage('Update student id success', 'success');
+	}, [statusUpdateStudentId, addMessage, errorsUpdateStudentId]);
+
+	useEffect(() => {
 		statusUpdateStudentId === 'error' && addMessage(errorsUpdateStudentId.data.message, 'error');
 	}, [statusUpdateStudentId, addMessage, errorsUpdateStudentId]);
 
@@ -188,12 +193,15 @@ const UserDataGrid = ({ filterValue, onFilterChange, ...rest }: UserDataGridProp
 		const userNeedUpdate = users.find((u) => u.id === id);
 
 		if (userNeedUpdate) {
-			const { fullName, id, avatar, dob, numberPhone, facebook, address } = userNeedUpdate;
+			const { fullName, id, avatar, dob, numberPhone, facebook, address, studentId } =
+				userNeedUpdate;
+
+			if (studentId === value) return;
 
 			const updateForm: UpdateStudentFormData = {
 				fullname: fullName,
 				id,
-				studentId: value?.toString(),
+				studentId: value?.toString().trim(),
 				avatar,
 				dob,
 				numberPhone,
@@ -237,6 +245,7 @@ const UserDataGrid = ({ filterValue, onFilterChange, ...rest }: UserDataGridProp
 					disableSelectionOnClick
 					onCellEditCommit={handleStudentIdCommit}
 					isCellEditable={(cell) => cell.field === 'studentId'}
+					isRowSelectable={(params: GridRowParams) => params.row.status === 'active'}
 				/>
 			</div>
 		</div>
