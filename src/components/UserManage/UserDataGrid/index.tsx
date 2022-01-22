@@ -123,7 +123,7 @@ const UserDataGrid = ({ filterValue, onFilterChange, ...rest }: UserDataGridProp
 		if (valueBlockUsers === null) return;
 
 		const userHasBlocked = (idNeedFind: number) => {
-			return valueBlockUsers.data.users.find(
+			return valueBlockUsers.data.data.users.find(
 				(updatedUser: UserModel) => updatedUser.id === idNeedFind
 			);
 		};
