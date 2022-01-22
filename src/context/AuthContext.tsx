@@ -70,6 +70,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
 		localStorage.setItem('access_token', res.data.accessToken);
 		setCurrentUser(res.data.user as UserModel);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const logout = useCallback(async () => {
