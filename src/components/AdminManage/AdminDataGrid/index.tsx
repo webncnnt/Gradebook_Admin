@@ -1,18 +1,11 @@
-import {
-	DataGrid,
-	GridColDef,
-	GridEventListener,
-	GridEvents,
-	GridSelectionModel,
-	GridSortModel
-} from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridSelectionModel, GridSortModel } from '@mui/x-data-grid';
 import { HTMLAttributes, useEffect, useState } from 'react';
 import moment from 'moment';
 import useAlert from '../../../hooks/useAlert';
 import AdminFilterValue from '../../../types/filter/AdminFilterValue';
 import { UserModel } from '../../../types/models/userModel';
 import useListFetch from '../../../hooks/useListFetch';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ROUTES from '../../../constants/route';
 import adminApi from '../../../services/apis/adminApi';
 
@@ -64,7 +57,6 @@ type AdminDataGridProps = {
 
 const AdminDataGrid = ({ filterValue, onFilterChange, ...rest }: AdminDataGridProps) => {
 	const { addMessage } = useAlert();
-	const navigate = useNavigate();
 	const [admins, setAdmins] = useState<UserModel[]>([]);
 
 	const { execute, listData, status, count, error } = useListFetch<UserModel>(
